@@ -1,0 +1,56 @@
+{
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/template",
+      "destination": "/template.html"
+    },
+    {
+      "source": "/camera",
+      "destination": "/camera.html"
+    },
+    {
+      "source": "/filter",
+      "destination": "/filter.html"
+    },
+    {
+      "source": "/result",
+      "destination": "/result.html"
+    },
+    {
+      "source": "/ganci",
+      "destination": "/ganci.html"
+    }
+  ]
+}

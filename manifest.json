@@ -1,0 +1,29 @@
+{
+  "name": "LUX Photobooth Local",
+  "short_name": "LUX Local",
+  "description": "Photostrip, Photobox 4R, dan Ganci tanpa login atau database server.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF8FC",
+  "theme_color": "#1D3557",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "photo",
+    "entertainment",
+    "utilities"
+  ]
+}

@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <meta name="theme-color" content="#1D3557">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="LUX Photo">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Hasil - LUX Photobooth</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --orange: #D84B7E; --yellow: #E5B842; --green: #E5B842;
+      --pink: #D84B7E; --purple: #1D3557;
+      --bg: #FFF8FC; --card: #ffffff; --border: #fad0e4;
+      --text: #1D3557; --text2: #6b7fa3;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; padding: 20px;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1;
+      background-image: radial-gradient(circle, rgba(216,75,126,0.07) 1px, transparent 1px);
+      background-size: 28px 28px; background-color: var(--bg);
+    }
+    .logo-text {
+      font-size: 15px; font-weight: 900; margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--orange), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    h2 { font-size: 22px; font-weight: 900; margin-bottom: 4px; text-align: center; }
+    p.sub { font-size: 14px; color: var(--text2); margin-bottom: 20px; text-align: center; font-weight: 500; }
+    .main-layout {
+      display: flex; gap: 28px; width: 100%; max-width: 960px;
+      align-items: flex-start; flex-wrap: wrap; justify-content: center;
+    }
+    .result-wrapper {
+      position: relative; flex-shrink: 0; border-radius: 20px; overflow: hidden;
+      border: 3px solid var(--border); background: #f0f0f0;
+      box-shadow: 0 12px 40px rgba(216,75,126,0.18);
+    }
+    #resultCanvas { display: block; }
+    .loading-overlay {
+      position: absolute; inset: 0; background: rgba(255,248,240,0.92);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; font-size: 14px; color: var(--text2); font-weight: 600;
+    }
+    .spinner {
+      width: 40px; height: 40px; border: 4px solid var(--border);
+      border-top-color: var(--orange); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .action-panel { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 10px; }
+    .section-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text2); margin-bottom: 6px;
+    }
+    .btn {
+      display: flex; align-items: center; justify-content: space-between;
+      border: none; cursor: pointer; font-weight: 700; font-size: 14px;
+      padding: 14px 18px; border-radius: 50px; transition: all 0.2s; width: 100%;
+    }
+    .btn-label { flex: 1; text-align: center; }
+    .btn-badge {
+      font-size: 11px; font-weight: 800; opacity: 0.75; letter-spacing: 0.5px;
+      background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 50px;
+    }
+    .btn-orange { background: linear-gradient(135deg, var(--orange), var(--purple)); color: white; box-shadow: 0 6px 20px rgba(216,75,126,0.4); }
+    .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(216,75,126,0.5); }
+    .btn-orange:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+    .btn-purple { background: linear-gradient(135deg, var(--purple), #D84B7E); color: white; box-shadow: 0 6px 20px rgba(168,85,247,0.35); }
+    .btn-purple:hover { transform: translateY(-2px); }
+    .btn-purple:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+    .btn-green { background: linear-gradient(135deg, var(--green), #c9972a); color: white; box-shadow: 0 6px 20px rgba(229,184,66,0.35); }
+    .btn-green:hover { transform: translateY(-2px); }
+    .btn-green:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+    .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ffb300); color: #3d2600; box-shadow: 0 6px 20px rgba(255,210,63,0.4); }
+    .btn-yellow:hover { transform: translateY(-2px); }
+    .btn-yellow:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+    .btn-outline { background: white; color: var(--text2); border: 2px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-outline:disabled { opacity: 0.4; }
+    .btn-cetak2strip { background: linear-gradient(135deg, #D84B7E, #E5B842); color: white; box-shadow: 0 6px 20px rgba(216,75,126,0.35); }
+    .btn-cetak2strip:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(216,75,126,0.45); }
+    .btn-cetak2strip:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+
+    .result-action-group {
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      padding: 14px;
+      margin: 12px 0;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 8px 24px rgba(29,53,87,.05);
+    }
+    .result-action-group.print-group {
+      border-color: rgba(216,75,126,.32);
+      background: linear-gradient(180deg, rgba(216,75,126,.07), rgba(229,184,66,.06));
+    }
+    .result-action-group.share-group {
+      border-color: rgba(32,151,166,.34);
+      background: linear-gradient(180deg, rgba(32,151,166,.08), rgba(29,53,87,.04));
+    }
+    .result-action-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+    .result-action-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text2);
+    }
+    .result-action-hint {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text2);
+      text-align: right;
+      line-height: 1.35;
+    }
+    .result-action-group .btn + .btn { margin-top: 10px; }
+
+    .btn-print-strip {
+      background: linear-gradient(135deg, #D84B7E, #E5B842);
+      color: white;
+      box-shadow: 0 7px 22px rgba(216,75,126,0.32);
+    }
+    .btn-print-strip:hover { transform: translateY(-2px); box-shadow: 0 11px 30px rgba(216,75,126,0.42); }
+    .btn-print-strip .btn-badge {
+      background: rgba(255,255,255,.22);
+      color: white;
+    }
+
+    .btn-share-strip {
+      background: linear-gradient(135deg, #2097A6, #1D3557);
+      color: white;
+      box-shadow: 0 7px 22px rgba(32,151,166,0.25);
+    }
+    .btn-share-strip:hover { transform: translateY(-2px); box-shadow: 0 11px 30px rgba(29,53,87,0.35); }
+    .btn-share-strip .btn-badge {
+      background: rgba(255,255,255,.22);
+      color: white;
+    }
+    .btn-share-strip:disabled,
+    .btn-print-strip:disabled {
+      opacity: 0.4;
+      transform: none;
+      box-shadow: none;
+    }
+    @media(max-width:720px){
+      .result-action-head { align-items: flex-start; flex-direction: column; }
+      .result-action-hint { text-align: left; }
+    }
+    .hint-text { font-size: 11px; color: var(--text2); text-align: center; margin-top: -4px; font-weight: 500; }
+    .progress-bar {
+      height: 4px; background: var(--border); border-radius: 50px;
+      overflow: hidden; margin-top: -4px; display: none;
+    }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--pink)); width: 0%; transition: width 0.3s; border-radius: 50px; }
+    .divider { height: 2px; background: var(--border); border-radius: 50px; margin: 4px 0; }
+    /* QR section */
+    .btn-qr {
+      background: white; border: 2.5px solid var(--border); border-radius: 50px;
+      padding: 13px 28px; font-size: 15px; font-weight: 800; color: var(--text);
+      cursor: pointer; transition: all 0.2s; width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .btn-qr:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+    .btn-qr:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    /* QR Modal */
+    .qr-modal-box {
+      background: white; border-radius: 28px; padding: 32px 28px 28px;
+      max-width: 380px; width: 100%; text-align: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+      animation: qrPop 0.28s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    @keyframes qrPop { from{transform:scale(0.8) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+    .qr-modal-title {
+      font-size: 22px; font-weight: 900; color: var(--text);
+      margin-bottom: 4px; letter-spacing: -0.5px;
+    }
+    .qr-modal-sub {
+      font-size: 13px; color: var(--text2); font-weight: 500;
+      margin-bottom: 24px; line-height: 1.5;
+    }
+    #qrcodeModal {
+      display: flex; justify-content: center; margin-bottom: 20px;
+      padding: 16px; background: var(--bg); border-radius: 20px;
+      border: 2px solid var(--border);
+    }
+    #qrcodeModal canvas, #qrcodeModal img {
+      border-radius: 12px;
+      width: 240px !important; height: 240px !important;
+    }
+    #qrStatus {
+      font-size: 13px; color: var(--text2); font-weight: 600;
+      margin-bottom: 20px; min-height: 20px;
+    }
+    .btn-qr-close {
+      width: 100%; padding: 14px; border-radius: 50px;
+      border: 2.5px solid var(--border); background: white;
+      color: var(--text2); font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-qr-close:hover { border-color: var(--orange); color: var(--orange); }
+    /* Countdown */
+    .countdown-bar {
+      background: linear-gradient(135deg, #fff3e0, #fff8f0);
+      border: 2px solid #f5c6da; border-radius: 14px;
+      padding: 10px 14px; margin: 0 0 10px;
+      display: none; align-items: center; gap: 10px;
+    }
+    .countdown-bar.visible { display: flex; }
+    .countdown-icon { font-size: 18px; flex-shrink: 0; }
+    .countdown-text { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .countdown-text span { color: var(--orange); font-weight: 900; }
+    /* Status toast */
+    #statusToast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--text); color: white; padding: 12px 24px; border-radius: 50px;
+      font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.3s;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2); white-space: nowrap;
+    }
+    #statusToast.show { transform: translateX(-50%) translateY(0); }
+    .foto-lagi-btn {
+      background: white; color: var(--text2); border: 2px solid var(--border);
+      border-radius: 50px; padding: 14px 24px; font-size: 15px; font-weight: 700;
+      cursor: pointer; width: 100%; transition: all 0.2s; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-top: 4px;
+    }
+    .foto-lagi-btn:hover { border-color: var(--orange); color: var(--orange); }
+    /* Print/share section */
+    .extra-card {
+      background: white; border-radius: 18px; border: 2px solid var(--border);
+      padding: 14px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+  
+    /* iPad / tablet fix: action button tetap bisa diklik meski viewport terasa zoom */
+    @media (min-width: 700px) and (max-width: 1180px), (max-height: 820px) {
+      body { overflow-x: hidden; }
+      .btn-row, .actions, .action-row, .button-row, .footer-actions {
+        position: sticky;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        z-index: 50;
+        background: rgba(255, 248, 252, 0.96);
+        backdrop-filter: blur(8px);
+        border-radius: 18px;
+        padding: 8px;
+        box-shadow: 0 -8px 24px rgba(216, 75, 126, 0.10);
+      }
+      button, .btn {
+        min-height: 44px;
+      }
+      canvas, img {
+        max-width: 100%;
+      }
+    }
+
+  
+    .consent-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(29,53,87,.46);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:18px}
+    .consent-box{width:100%;max-width:520px;background:white;border:2px solid #fad0e4;border-radius:26px;padding:24px;box-shadow:0 20px 60px rgba(29,53,87,.24);color:#1D3557}
+    .consent-title{font-size:24px;font-weight:950;letter-spacing:-.6px;text-align:center;margin-bottom:8px}
+    .consent-desc{font-size:14px;color:#6b7fa3;font-weight:650;line-height:1.55;text-align:center;margin-bottom:16px}
+    .consent-check{display:flex;gap:10px;background:#fff8fc;border:2px solid #fad0e4;border-radius:16px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.45;font-weight:700}
+    .consent-check input{width:18px;height:18px;accent-color:#D84B7E;flex:0 0 auto;margin-top:2px}
+    .consent-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+    .consent-row input{width:100%;padding:12px;border-radius:14px;border:2px solid #fad0e4;background:#fff8fc;font:inherit;color:#1D3557}
+    .consent-note{font-size:12px;color:#6b7fa3;line-height:1.45;margin-bottom:14px}
+    .consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .consent-actions button{border:0;border-radius:999px;padding:13px 16px;font:inherit;font-weight:900;cursor:pointer}
+    .consent-actions .primary{background:linear-gradient(135deg,#D84B7E,#E5B842);color:white}
+    .consent-actions .secondary{background:white;color:#1D3557;border:2px solid #fad0e4}
+    @media(max-width:520px){.consent-row,.consent-actions{grid-template-columns:1fr}.consent-title{font-size:21px}}
+
+  </style>
+</head>
+<body>
+
+  <div style="text-align:center;margin-bottom:18px;">
+    <div class="logo-text" style="display:flex;align-items:center;gap:8px;"><img data-auth-logo src="/logo.png" alt="LUX Photobooth" style="height:36px;width:36px;border-radius:50%;object-fit:cover;"><span>LUX PHOTOBOOTH</span></div>
+    <h2>Hasil Fotomu 🎉</h2>
+    <p class="sub">Download satuan atau semua sekaligus</p>
+  </div>
+
+  <div class="main-layout">
+
+    <div class="result-wrapper" id="resultWrapper">
+      <canvas id="resultCanvas"></canvas>
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <span id="loadingText">Menggabungkan foto...</span>
+      </div>
+    </div>
+
+    <div class="action-panel">
+
+      <div class="countdown-bar" id="countdownBar">
+        <div class="countdown-icon">⏳</div>
+        <div class="countdown-text">File akan dihapus otomatis dalam <span id="countdownText">14 hari</span> — download sekarang!</div>
+      </div>
+
+      <div class="section-label">Download Satuan</div>
+
+      <button class="btn btn-download" id="btnJpg" onclick="downloadJpg()" disabled>
+        <span class="btn-icon">🖼️</span>
+        <span class="btn-label">Download Foto</span>
+        <span class="btn-badge">JPG</span>
+      </button>
+
+      <button class="btn btn-live" id="btnLive" onclick="downloadLive()" disabled>
+        <span class="btn-icon">🎬</span>
+        <span class="btn-label">Download Live Fotostrip</span>
+        <span class="btn-badge">MP4</span>
+      </button>
+      <div class="progress-wrap" id="liveProgress"><div class="progress-fill" id="liveProgressFill"></div></div>
+      <p class="hint" id="liveHint"></p>
+
+      <button class="btn btn-gif" id="btnGif" onclick="downloadGif()" disabled>
+        <span class="btn-icon">✨</span>
+        <span class="btn-label">Download GIF Animasi</span>
+        <span class="btn-badge">GIF</span>
+      </button>
+      <div class="progress-wrap" id="gifProgress"><div class="progress-fill" id="gifProgressFill"></div></div>
+      <p class="hint" id="gifHint"></p>
+
+      <div class="divider"></div>
+      <div class="section-label">Download Semua</div>
+
+      <button class="btn btn-zip" id="btnZip" onclick="downloadZip()" disabled>
+        <span class="btn-icon">📦</span>
+        <span class="btn-label">Download Semua (ZIP)</span>
+        <span class="btn-badge">JPG + MP4 + GIF</span>
+      </button>
+      <div class="progress-wrap" id="zipProgress"><div class="progress-fill" id="zipProgressFill"></div></div>
+
+      <div class="divider"></div>
+
+      <div class="result-action-group print-group" id="printActionGroup">
+        <div class="result-action-head">
+          <div class="result-action-title">🖨️ Print / Cetak</div>
+          <div class="result-action-hint">buat file siap cetak 10×15</div>
+        </div>
+
+        <button class="btn btn-print-strip" id="btnShare" onclick="shareNative()" disabled>
+          <span class="btn-icon">🖨️</span>
+          <span class="btn-label">Cetak 1 Strip</span>
+          <span class="btn-badge">Print</span>
+        </button>
+
+        <button class="btn btn-print-strip" id="btnCetak2Strip" onclick="cetak2Strip()" disabled>
+          <span class="btn-icon">🖨️</span>
+          <span class="btn-label">Cetak 2 Strip</span>
+          <span class="btn-badge">Print</span>
+        </button>
+      </div>
+
+      <div class="result-action-group share-group" id="shareActionGroup">
+        <div class="result-action-head">
+          <div class="result-action-title">📤 Share / Bagikan</div>
+          <div class="result-action-hint">buat kirim ke WhatsApp, Telegram, atau download</div>
+        </div>
+
+        <button class="btn btn-share-strip" id="btnShare1Strip" onclick="share1Strip()" disabled>
+          <span class="btn-icon">📤</span>
+          <span class="btn-label">Share 1 Strip</span>
+          <span class="btn-badge">Share</span>
+        </button>
+
+        <button class="btn btn-share-strip" id="btnShare2Strip" onclick="share2Strip()" disabled>
+          <span class="btn-icon">📤</span>
+          <span class="btn-label">Share 2 Strip</span>
+          <span class="btn-badge">Share</span>
+        </button>
+      </div>
+
+
+      <div class="divider"></div>
+      <p id="statusMsg"></p>
+      <button class="btn btn-ulang" onclick="fotoLagi()">📷 Foto Lagi</button>
+
+    </div>
+  </div>
+
+
+<script>
+  // ─── Local-only mode ───
+  function ensureResultConsent(action) { action(); }
+
+  // ─── State ───
+
+  const PHOTO_STORE_DB = 'lux-photo-temp-db';
+  const PHOTO_STORE_NAME = 'items';
+
+  function idbOpen() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(PHOTO_STORE_DB, 1);
+      req.onupgradeneeded = () => {
+        if (!req.result.objectStoreNames.contains(PHOTO_STORE_NAME)) {
+          req.result.createObjectStore(PHOTO_STORE_NAME);
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error || new Error('IndexedDB gagal dibuka'));
+    });
+  }
+
+  async function idbGet(key) {
+    const db = await idbOpen();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(PHOTO_STORE_NAME, 'readonly');
+      const req = tx.objectStore(PHOTO_STORE_NAME).get(key);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error || new Error('IndexedDB gagal membaca'));
+      tx.oncomplete = () => db.close();
+    });
+  }
+
+  async function idbDelete(key) {
+    try {
+      const db = await idbOpen();
+      return new Promise((resolve) => {
+        const tx = db.transaction(PHOTO_STORE_NAME, 'readwrite');
+        tx.objectStore(PHOTO_STORE_NAME).delete(key);
+        tx.oncomplete = () => { db.close(); resolve(); };
+        tx.onerror = () => { db.close(); resolve(); };
+      });
+    } catch(e) {}
+  }
+
+  function normalizePhotoArray(value) {
+    const candidate = Array.isArray(value)
+      ? value
+      : (value && Array.isArray(value.photos) ? value.photos : []);
+    return candidate.filter(item => typeof item === 'string' && item.length > 32);
+  }
+
+  async function loadLargePhotoArray(key) {
+    // IndexedDB diperiksa langsung; marker localStorage tidak lagi menjadi syarat.
+    try {
+      const fromIdb = normalizePhotoArray(await idbGet(key));
+      if (fromIdb.length) return fromIdb;
+    } catch (e) {
+      console.warn('[LUX] IndexedDB read failed:', key, e);
+    }
+
+    try {
+      return normalizePhotoArray(JSON.parse(localStorage.getItem(key) || '[]'));
+    } catch(e) {
+      return [];
+    }
+  }
+
+  let filteredPhotos = [];
+  let filteredPhotosReady = false;
+  const livePhotos     = JSON.parse(localStorage.getItem('livePhotos') || '[]');
+  const captureFlow    = localStorage.getItem('captureFlow') || '';
+  const isEventMode = false;
+  const isPhotoboxMode = captureFlow === 'photobox';
+  const templateSrc    = localStorage.getItem('templateSrc');
+  const slots          = JSON.parse(localStorage.getItem('templateSlots') || '[]').map(s => ({
+    ...s,
+    r: Math.round((((Number(s?.r ?? s?.rotate ?? s?.rotation ?? 0) || 0) % 360) + 360) % 360)
+  }));
+  const tmplW          = parseInt(localStorage.getItem('templateW') || '591');
+  const tmplH          = parseInt(localStorage.getItem('templateH') || '1772');
+  const isBasicTemplate = localStorage.getItem('templateIsBasic') === '1';
+  const templatePhotoLayer = localStorage.getItem('templatePhotoLayer') === 'front' ? 'front' : 'behind';
+
+  const canvas = document.getElementById('resultCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  const displayW = 240;
+  const displayH = Math.round(tmplH * displayW / tmplW);
+  canvas.style.width  = displayW + 'px';
+  canvas.style.height = displayH + 'px';
+  canvas.width  = tmplW;
+  canvas.height = tmplH;
+
+  let finalDataURL   = null;
+  let gifDataURL     = null;
+  let liveMP4URL     = null; // object URL for live fotostrip video
+
+  if (isPhotoboxMode) {
+    document.title = 'Hasil Photobox 4R - LUX Photobooth';
+    const btnShare = document.getElementById('btnShare');
+    const btnCetak2 = document.getElementById('btnCetak2Strip');
+    const btnShare1 = document.getElementById('btnShare1Strip');
+    const btnShare2 = document.getElementById('btnShare2Strip');
+    if (btnShare) {
+      btnShare.querySelector('.btn-label').textContent = 'Cetak 4R';
+      btnShare.querySelector('.btn-badge').textContent = 'Print';
+    }
+    if (btnCetak2) btnCetak2.style.display = 'none';
+    const printHint = document.querySelector('#printActionGroup .result-action-hint');
+    const shareHint = document.querySelector('#shareActionGroup .result-action-hint');
+    if (printHint) printHint.textContent = 'photobox sudah 10×15 / 4R';
+    if (shareHint) shareHint.textContent = 'bagikan file photobox 4R';
+    if (btnShare1) {
+      btnShare1.querySelector('.btn-label').textContent = 'Share 4R';
+      btnShare1.querySelector('.btn-badge').textContent = 'Share';
+    }
+    if (btnShare2) btnShare2.style.display = 'none';
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload  = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  function dataURLtoBlob(dataURL) {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    const u8 = new Uint8Array(bstr.length);
+    for (let i = 0; i < bstr.length; i++) u8[i] = bstr.charCodeAt(i);
+    return new Blob([u8], { type: mime });
+  }
+
+  async function maybeWatermarkDataURL(dataURL) { return dataURL; }
+
+  function triggerDownload(href, filename) {
+    const a = document.createElement('a');
+    if (href.startsWith('blob:') || href.startsWith('http')) {
+      a.href = href;
+    } else {
+      a.href = URL.createObjectURL(dataURLtoBlob(href));
+    }
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => document.body.removeChild(a), 300);
+  }
+
+  function showStatus(msg, color = '#27ae60') {
+    const el = document.getElementById('statusMsg');
+    el.style.color = color;
+    el.textContent = msg;
+    setTimeout(() => { el.textContent = ''; }, 4000);
+  }
+
+  function setProgress(id, pct) {
+    const wrap = document.getElementById(id + 'Progress');
+    const fill = document.getElementById(id + 'ProgressFill');
+    if (!wrap || !fill) return;
+    if (pct === null) { wrap.classList.remove('show'); fill.style.width = '0%'; return; }
+    wrap.classList.add('show');
+    fill.style.width = pct + '%';
+  }
+
+  // ─── Generate composite image ───
+  async function generateResult() {
+    try {
+      if (!filteredPhotosReady) {
+        filteredPhotos = await loadLargePhotoArray('filteredPhotos');
+        filteredPhotosReady = true;
+      }
+      if (!filteredPhotos.length) {
+        filteredPhotos = await loadLargePhotoArray('photos');
+      }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, tmplW, tmplH);
+
+      const templateImage = templateSrc ? await loadImage(templateSrc) : null;
+      if (templateImage && templatePhotoLayer === 'front') {
+        ctx.drawImage(templateImage, 0, 0, tmplW, tmplH);
+      }
+
+      for (let i = 0; i < slots.length; i++) {
+        const slot = slots[i];
+        const src  = filteredPhotos[i] || filteredPhotos[filteredPhotos.length - 1];
+        if (!src) continue;
+        const photo = await loadImage(src);
+        const angle = ((Number(slot.r ?? slot.rotate ?? slot.rotation ?? 0) || 0) * Math.PI) / 180;
+        const scale = Math.max(slot.w / photo.width, slot.h / photo.height);
+        const sw = slot.w / scale, sh = slot.h / scale;
+        const sx = (photo.width - sw) / 2, sy = (photo.height - sh) / 2;
+
+        ctx.save();
+        ctx.translate(slot.x + slot.w / 2, slot.y + slot.h / 2);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.rect(-slot.w / 2, -slot.h / 2, slot.w, slot.h);
+        ctx.clip();
+        ctx.drawImage(photo, sx, sy, sw, sh, -slot.w / 2, -slot.h / 2, slot.w, slot.h);
+        ctx.restore();
+      }
+
+      if (templateImage && templatePhotoLayer === 'behind') {
+        ctx.drawImage(templateImage, 0, 0, tmplW, tmplH);
+      }
+
+      // Local edition exports without account or plan watermarks.
+
+      finalDataURL = canvas.toDataURL('image/jpeg', 0.97);
+
+      // Bersihkan base64 besar dari localStorage setelah dipakai
+      // Data besar dibersihkan setelah composite selesai
+      try {
+        const ts = localStorage.getItem('templateSrc') || '';
+        if (ts.startsWith('data:')) localStorage.removeItem('templateSrc');
+        const fp = localStorage.getItem('filteredPhotos') || '';
+        if (fp.length > 100000) {
+          // Hapus filtered photos setelah composite selesai dibuat
+          // Tapi kita masih butuh untuk GIF, jadi simpan dulu, hapus setelah GIF selesai
+        }
+      } catch(e) {}
+
+      document.getElementById('loadingOverlay').style.display = 'none';
+
+      const hasLive = livePhotos.some(Boolean);
+      ['btnJpg','btnShare','btnZip','btnCetak2Strip','btnShare1Strip','btnShare2Strip'].forEach(id => {
+        document.getElementById(id).disabled = false;
+      });
+      document.getElementById('btnLive').disabled = !hasLive;
+      if (!hasLive) document.getElementById('liveHint').textContent = 'Live photo tidak tersedia';
+
+      const canGif = filteredPhotos.length >= 2;
+      document.getElementById('btnGif').disabled = !canGif;
+      if (!canGif) document.getElementById('gifHint').textContent = 'Butuh minimal 2 foto';
+
+      // Generate GIF & Live Photo otomatis di background
+      autoGenerateGif();
+      autoGenerateLive();
+      // Tampilkan plan banner
+      showPlanBanner();
+
+    } catch(e) {
+      console.error(e);
+      document.getElementById('loadingOverlay').innerHTML =
+        '<span style="color:#e94560;padding:16px;text-align:center">Gagal generate foto.<br>Coba ulangi dari awal.</span>';
+    }
+  }
+
+
+  // ─── Auto Generate GIF ───
+  async function autoGenerateGif() {
+    if (gifBlob || filteredPhotos.length < 2) return;
+    try {
+      gifBlob = await makeGif();
+      const btnGif = document.getElementById('btnGif');
+      if (btnGif) btnGif.disabled = false;
+      console.log('[auto] GIF generated locally, size:', gifBlob.size);
+    } catch (e) {
+      console.warn('[auto] GIF generation gagal:', e);
+    }
+  }
+
+  // ─── Auto Generate Live Photo ───
+  async function autoGenerateLive() {
+    if (liveMP4URL) return;
+    const validLives = livePhotos.filter(Boolean);
+    if (!validLives.length) return;
+
+    const btn = document.getElementById('btnLive');
+    try {
+      if (btn) btn.disabled = true;
+      const videoEls = await Promise.all(validLives.map(src => new Promise(resolve => {
+        const video = document.createElement('video');
+        video.src = src;
+        video.muted = true;
+        video.playsInline = true;
+        video.onloadedmetadata = () => resolve(video);
+        video.onerror = () => resolve(null);
+      })));
+      const usableVideos = videoEls.filter(Boolean);
+      if (!usableVideos.length) return;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = usableVideos[0].videoWidth || 960;
+      canvas.height = usableVideos[0].videoHeight || 720;
+      const localCtx = canvas.getContext('2d');
+      const stream = canvas.captureStream(30);
+      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8')
+        ? 'video/webm;codecs=vp8'
+        : 'video/webm';
+      const recorder = new MediaRecorder(stream, { mimeType });
+      const chunks = [];
+      recorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
+      recorder.start(100);
+
+      for (const video of usableVideos) {
+        await new Promise(resolve => {
+          let settled = false;
+          const finish = () => {
+            if (settled) return;
+            settled = true;
+            video.pause();
+            resolve();
+          };
+          video.currentTime = 0;
+          video.onended = finish;
+          video.ontimeupdate = () => {
+            localCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            if (video.ended || video.currentTime >= video.duration) finish();
+          };
+          video.play().catch(finish);
+          setTimeout(finish, 5000);
+        });
+      }
+
+      const stopped = new Promise(resolve => { recorder.onstop = resolve; });
+      recorder.stop();
+      await stopped;
+      liveMP4URL = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+      console.log('[auto] Live photo generated locally');
+    } catch (e) {
+      console.warn('[auto] Live generation gagal:', e);
+    } finally {
+      if (btn) btn.disabled = !liveMP4URL;
+    }
+  }
+
+  // ─── Plan Banner hidden on result page ───
+  function showPlanBanner() { return; }
+
+
+  // ─── Download JPG ───
+  function downloadJpg(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => downloadJpg(true));
+    if (!finalDataURL) return;
+    triggerDownload(finalDataURL, `lux-photobooth-${Date.now()}.jpg`);
+    showStatus('Download foto dimulai ✓');
+  }
+
+  // ─── Live Fotostrip Video ───
+  // Buat 1 video: semua slot live video tampil sekaligus dalam layout strip
+  async function downloadLive(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => downloadLive(true));
+    const btn = document.getElementById('btnLive');
+    if (liveMP4URL) {
+      triggerDownload(liveMP4URL, `lux-fotostrip-live-${Date.now()}.webm`);
+      showStatus('Download live fotostrip ✓');
+      return;
+    }
+
+    const validLives = livePhotos.filter(Boolean);
+    if (!validLives.length) {
+      showStatus('Tidak ada live video', '#e94560');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.querySelector('.btn-label').textContent = 'Membuat fotostrip video...';
+    setProgress('live', 5);
+    document.getElementById('liveHint').textContent = 'Memuat video...';
+
+    try {
+      // Load semua video element
+      const videoEls = await Promise.all(livePhotos.map((src, i) => {
+        return new Promise((resolve) => {
+          if (!src) { resolve(null); return; }
+          const v = document.createElement('video');
+          v.src = src;
+          v.muted = true;
+          v.loop = true;
+          v.playsInline = true;
+          v.onloadeddata = () => resolve(v);
+          v.onerror = () => resolve(null);
+          v.load();
+        });
+      }));
+
+      setProgress('live', 20);
+      document.getElementById('liveHint').textContent = 'Menyusun strip...';
+
+      // Layout: strip vertikal, semua slot stack dari atas ke bawah
+      // Setiap slot: lebar penuh, tinggi proporsional
+      const STRIP_W = 320;
+      const slotH   = Math.round(STRIP_W * 3 / 4); // 4:3 per slot
+      const STRIP_H = slotH * slots.length;
+
+      const offscreen = document.createElement('canvas');
+      offscreen.width  = STRIP_W;
+      offscreen.height = STRIP_H;
+      const offCtx = offscreen.getContext('2d');
+
+      // Start all videos
+      const playPromises = videoEls.map(v => v ? v.play().catch(() => {}) : Promise.resolve());
+      await Promise.all(playPromises);
+      setProgress('live', 40);
+
+      // Record the composite canvas
+      const stream = offscreen.captureStream(24);
+      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8')
+        ? 'video/webm;codecs=vp8' : 'video/webm';
+      const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2000000 });
+      const chunks = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+      recorder.start(100);
+      setProgress('live', 50);
+      document.getElementById('liveHint').textContent = 'Merekam...';
+
+      // Draw loop for ~3 seconds
+      const DURATION = 3000;
+      const startTime = performance.now();
+
+      await new Promise(resolve => {
+        function drawFrame() {
+          const elapsed = performance.now() - startTime;
+          const progress = Math.min(elapsed / DURATION, 1);
+          setProgress('live', 50 + Math.round(progress * 40));
+
+          offCtx.fillStyle = '#000';
+          offCtx.fillRect(0, 0, STRIP_W, STRIP_H);
+
+          videoEls.forEach((v, i) => {
+            const y = i * slotH;
+            if (v && v.readyState >= 2) {
+              // Cover fit
+              const vw = v.videoWidth || STRIP_W;
+              const vh = v.videoHeight || slotH;
+              const scale = Math.max(STRIP_W / vw, slotH / vh);
+              const sw = STRIP_W / scale, sh = slotH / scale;
+              const sx = (vw - sw) / 2, sy = (vh - sh) / 2;
+              offCtx.drawImage(v, sx, sy, sw, sh, 0, y, STRIP_W, slotH);
+            } else if (filteredPhotos[i]) {
+              // Fallback: draw still photo
+              const img = new Image();
+              img.src = filteredPhotos[i];
+              offCtx.drawImage(img, 0, y, STRIP_W, slotH);
+            }
+
+            // Slot border
+            offCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+            offCtx.lineWidth = 1;
+            offCtx.strokeRect(0, y, STRIP_W, slotH);
+
+            // Slot number
+            offCtx.fillStyle = 'rgba(255,255,255,0.5)';
+            offCtx.font = 'bold 12px sans-serif';
+            offCtx.fillText(`${i+1}`, 8, y + 18);
+          });
+
+          if (elapsed < DURATION) {
+            requestAnimationFrame(drawFrame);
+          } else {
+            resolve();
+          }
+        }
+        requestAnimationFrame(drawFrame);
+      });
+
+      recorder.stop();
+      setProgress('live', 95);
+
+      // Wait for recorder to finish
+      await new Promise(resolve => { recorder.onstop = resolve; });
+
+      const blob = new Blob(chunks, { type: mimeType });
+      liveMP4URL = URL.createObjectURL(blob);
+
+      // Pause all videos
+      videoEls.forEach(v => v && v.pause());
+
+      setProgress('live', null);
+      document.getElementById('liveHint').textContent = '';
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download Live Fotostrip';
+
+      triggerDownload(liveMP4URL, `lux-fotostrip-live-${Date.now()}.webm`);
+      showStatus('Live fotostrip berhasil ✓');
+
+    } catch(e) {
+      console.error('Live video error:', e);
+      setProgress('live', null);
+      document.getElementById('liveHint').textContent = 'Gagal: ' + e.message;
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download Live Fotostrip';
+      showStatus('Gagal buat live video: ' + e.message, '#e94560');
+    }
+  }
+
+  // ─── GIF (pure canvas, no external encoder) ───
+  // Pakai canvas + requestAnimationFrame → capture frames → encode manual
+  let gifBlob = null;
+
+  async function downloadGif(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => downloadGif(true));
+    if (gifBlob) {
+      triggerDownload(URL.createObjectURL(gifBlob), `lux-animated-${Date.now()}.gif`);
+      showStatus('Download GIF ✓');
+      return;
+    }
+
+    const btn = document.getElementById('btnGif');
+    btn.disabled = true;
+    btn.querySelector('.btn-label').textContent = 'Membuat GIF...';
+    setProgress('gif', 5);
+    document.getElementById('gifHint').textContent = 'Mengolah foto...';
+
+    try {
+      gifBlob = await makeGif();
+      setProgress('gif', null);
+      document.getElementById('gifHint').textContent = '';
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download GIF Animasi';
+      triggerDownload(URL.createObjectURL(gifBlob), `lux-animated-${Date.now()}.gif`);
+      showStatus('GIF berhasil dibuat ✓');
+    } catch(e) {
+      console.error('GIF error:', e);
+      setProgress('gif', null);
+      document.getElementById('gifHint').textContent = 'Gagal: ' + e.message;
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download GIF Animasi';
+      showStatus('Gagal buat GIF: ' + e.message, '#e94560');
+    }
+  }
+
+  // Pure JS GIF encoder — tidak butuh library eksternal
+  // ─── GIF generation — Median-Cut quantizer + Floyd-Steinberg dithering ───
+  async function makeGif() {
+    const GIF_W = 480;
+    const GIF_H = 360;
+    const DELAY = 80; // 800ms per frame
+
+    const images = await Promise.all(filteredPhotos.map(src => loadImage(src).catch(() => null)));
+    const validImages = images.filter(Boolean);
+    if (validImages.length < 2) throw new Error('Butuh minimal 2 foto');
+
+    setProgress('gif', 15);
+
+    const tmp = document.createElement('canvas');
+    tmp.width = GIF_W; tmp.height = GIF_H;
+    const tc = tmp.getContext('2d', { willReadFrequently: true });
+
+    // Draw all frames
+    const frameDataList = [];
+    for (let fi = 0; fi < validImages.length; fi++) {
+      const img = validImages[fi];
+      tc.fillStyle = '#ffffff';
+      tc.fillRect(0, 0, GIF_W, GIF_H);
+      const scale = Math.max(GIF_W / img.width, GIF_H / img.height);
+      const sw = GIF_W / scale, sh = GIF_H / scale;
+      tc.drawImage(img, (img.width-sw)/2, (img.height-sh)/2, sw, sh, 0, 0, GIF_W, GIF_H);
+      frameDataList.push(tc.getImageData(0, 0, GIF_W, GIF_H));
+      setProgress('gif', 15 + Math.round((fi+1) / validImages.length * 30));
+    }
+
+    setProgress('gif', 50);
+    document.getElementById('gifHint').textContent = 'Membangun palet warna...';
+
+    // Build global palette using median-cut across all frames
+    const palette = medianCut(frameDataList, 255);
+    // Reserve index 0 for white background
+    palette.unshift([255, 255, 255]);
+    while (palette.length < 256) palette.push([0, 0, 0]);
+
+    setProgress('gif', 65);
+    document.getElementById('gifHint').textContent = 'Encoding GIF...';
+
+    const gifData = encodeGIF(frameDataList, GIF_W, GIF_H, DELAY, palette);
+    setProgress('gif', 95);
+    return new Blob([gifData], { type: 'image/gif' });
+  }
+
+  // ─── Median-Cut Color Quantizer ───
+  function medianCut(frames, maxColors) {
+    // Sample pixels from all frames
+    const pixels = [];
+    const step = Math.max(1, Math.floor(frames[0].data.length / 4 / 3000));
+    frames.forEach(f => {
+      const d = f.data;
+      for (let i = 0; i < d.length; i += 4 * step) {
+        pixels.push([d[i], d[i+1], d[i+2]]);
+      }
+    });
+
+    // Median cut recursion
+    function cut(bucket, depth) {
+      if (depth === 0 || bucket.length <= 1) {
+        // Average the bucket
+        const avg = [0, 0, 0];
+        bucket.forEach(p => { avg[0] += p[0]; avg[1] += p[1]; avg[2] += p[2]; });
+        return [[Math.round(avg[0]/bucket.length), Math.round(avg[1]/bucket.length), Math.round(avg[2]/bucket.length)]];
+      }
+      // Find channel with largest range
+      let minR=255,maxR=0,minG=255,maxG=0,minB=255,maxB=0;
+      bucket.forEach(([r,g,b]) => {
+        if(r<minR)minR=r; if(r>maxR)maxR=r;
+        if(g<minG)minG=g; if(g>maxG)maxG=g;
+        if(b<minB)minB=b; if(b>maxB)maxB=b;
+      });
+      const rRange = maxR-minR, gRange = maxG-minG, bRange = maxB-minB;
+      const ch = rRange >= gRange && rRange >= bRange ? 0 : gRange >= bRange ? 1 : 2;
+      bucket.sort((a, b) => a[ch] - b[ch]);
+      const mid = Math.floor(bucket.length / 2);
+      return [
+        ...cut(bucket.slice(0, mid), depth - 1),
+        ...cut(bucket.slice(mid), depth - 1),
+      ];
+    }
+
+    const depth = Math.ceil(Math.log2(maxColors));
+    return cut(pixels, depth).slice(0, maxColors);
+  }
+
+  // ─── Floyd-Steinberg dithering + nearest color ───
+  function ditherFrame(imgData, w, h, palette) {
+    // Build KD-tree-like lookup: precompute nearest for sampled colors
+    const pixels = new Uint8Array(w * h);
+    const buf = new Float32Array(imgData.data); // copy for error diffusion
+
+    function nearest(r, g, b) {
+      let best = 0, bestD = Infinity;
+      for (let i = 0; i < palette.length; i++) {
+        const dr = r - palette[i][0], dg = g - palette[i][1], db = b - palette[i][2];
+        const d = dr*dr + dg*dg + db*db;
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      return best;
+    }
+
+    // Work on a copy with error buffer
+    const err = new Float32Array(w * h * 3).fill(0);
+    const src = new Float32Array(w * h * 3);
+    for (let i = 0; i < w * h; i++) {
+      src[i*3]   = imgData.data[i*4];
+      src[i*3+1] = imgData.data[i*4+1];
+      src[i*3+2] = imgData.data[i*4+2];
+    }
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = y * w + x;
+        const r = Math.max(0, Math.min(255, src[i*3]   + err[i*3]));
+        const g = Math.max(0, Math.min(255, src[i*3+1] + err[i*3+1]));
+        const b = Math.max(0, Math.min(255, src[i*3+2] + err[i*3+2]));
+
+        const idx = nearest(r, g, b);
+        pixels[i] = idx;
+
+        const er = r - palette[idx][0];
+        const eg = g - palette[idx][1];
+        const eb = b - palette[idx][2];
+
+        // Distribute error to neighbors (Floyd-Steinberg)
+        function addErr(nx, ny, factor) {
+          if (nx < 0 || nx >= w || ny >= h) return;
+          const ni = ny * w + nx;
+          err[ni*3]   += er * factor;
+          err[ni*3+1] += eg * factor;
+          err[ni*3+2] += eb * factor;
+        }
+        addErr(x+1, y,   7/16);
+        addErr(x-1, y+1, 3/16);
+        addErr(x,   y+1, 5/16);
+        addErr(x+1, y+1, 1/16);
+      }
+    }
+    return pixels;
+  }
+
+  // ─── GIF89a encoder ───
+  function encodeGIF(frames, w, h, delay, palette) {
+    const bytes = [];
+    function writeStr(s) { for (let i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i)); }
+    function write16(n) { bytes.push(n & 0xFF, (n >> 8) & 0xFF); }
+
+    writeStr('GIF89a');
+    write16(w); write16(h);
+    bytes.push(0xF7, 0, 0); // GCT: 256 colors, bg=0, aspect=0
+
+    for (let i = 0; i < 256; i++) {
+      const c = palette[i] || [0,0,0];
+      bytes.push(c[0], c[1], c[2]);
+    }
+
+    // Netscape loop extension
+    bytes.push(0x21, 0xFF, 0x0B);
+    writeStr('NETSCAPE2.0');
+    bytes.push(3, 1, 0, 0, 0);
+
+    frames.forEach((frame, fi) => {
+      setProgress('gif', 65 + Math.round((fi / frames.length) * 28));
+
+      bytes.push(0x21, 0xF9, 0x04, 0x00);
+      write16(delay);
+      bytes.push(0, 0);
+
+      bytes.push(0x2C);
+      write16(0); write16(0); write16(w); write16(h);
+      bytes.push(0x00);
+
+      // Dither this frame
+      const pixels = ditherFrame(frame, w, h, palette);
+
+      const lzw = lzwEncode(pixels, 8);
+      bytes.push(8);
+      for (let i = 0; i < lzw.length; i += 255) {
+        const block = lzw.slice(i, i + 255);
+        bytes.push(block.length);
+        for (const b of block) bytes.push(b);
+      }
+      bytes.push(0);
+    });
+
+    bytes.push(0x3B);
+    return new Uint8Array(bytes);
+  }
+
+  function lzwEncode(pixels, minCodeSize) {
+    const clearCode = 1 << minCodeSize;
+    const eoi = clearCode + 1;
+    const result = [];
+    let codeSize = minCodeSize + 1;
+    let nextCode = eoi + 1;
+    const table = new Map();
+
+    function resetTable() {
+      table.clear();
+      for (let i = 0; i < clearCode; i++) table.set(String(i), i);
+      codeSize = minCodeSize + 1;
+      nextCode = eoi + 1;
+    }
+
+    let buf = 0, bufLen = 0;
+    function writeBits(code) {
+      buf |= code << bufLen;
+      bufLen += codeSize;
+      while (bufLen >= 8) { result.push(buf & 0xFF); buf >>= 8; bufLen -= 8; }
+    }
+
+    resetTable();
+    writeBits(clearCode);
+
+    let prefix = String(pixels[0]);
+    for (let i = 1; i < pixels.length; i++) {
+      const c = String(pixels[i]);
+      const key = prefix + ',' + c;
+      if (table.has(key)) {
+        prefix = key;
+      } else {
+        writeBits(table.get(prefix));
+        if (nextCode < 4096) {
+          table.set(key, nextCode++);
+          if (nextCode > (1 << codeSize)) codeSize = Math.min(codeSize + 1, 12);
+        } else {
+          writeBits(clearCode);
+          resetTable();
+        }
+        prefix = c;
+      }
+    }
+    writeBits(table.get(prefix));
+    writeBits(eoi);
+    if (bufLen > 0) result.push(buf & 0xFF);
+    return result;
+  }
+
+
+
+  function forceDownloadBlob(blob, filename) {
+    if (!blob) throw new Error('Blob kosong');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || `lux-print-${Date.now()}.jpg`;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2500);
+  }
+
+
+  async function shareOrDownloadBlob(blob, filename, title, options = {}) {
+    if (!blob) throw new Error('Blob kosong');
+    const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+    const suppressCancel = options.suppressCancel !== false;
+
+    // Web Share API jalan paling aman di HTTPS + mobile browser.
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: title || 'LUX Photobooth',
+          text: options.text || 'Hasil foto dari LUX Photobooth ✨'
+        });
+        return 'shared';
+      } catch (e) {
+        // Di beberapa browser Android, balik dari share/print sheet bisa dilempar AbortError
+        // walaupun user tidak benar-benar membatalkan. Untuk tombol cetak, jangan tampilkan
+        // pesan "Share dibatalkan" karena bikin misleading.
+        if (e && e.name === 'AbortError') return suppressCancel ? 'handled' : 'cancelled';
+        console.warn('Web Share gagal, fallback download:', e);
+      }
+    }
+
+    forceDownloadBlob(blob, filename);
+    return 'downloaded';
+  }
+
+
+  function canvasToBlobSafe(canvas, type = 'image/jpeg', quality = 0.95) {
+    return new Promise((resolve, reject) => {
+      try {
+        if (!canvas || !canvas.width || !canvas.height) {
+          reject(new Error('Canvas belum siap'));
+          return;
+        }
+        canvas.toBlob(blob => {
+          if (!blob) reject(new Error('Gagal membuat file gambar'));
+          else resolve(blob);
+        }, type, quality);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  async function loadImageSafe(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Gagal load foto hasil'));
+      img.src = src;
+    });
+  }
+
+  function blobToDataURL(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('Gagal membaca file print'));
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  function escapePrintText(value) {
+    return String(value || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[ch]));
+  }
+
+  function buildPrintWindowHTML(imageDataURL, filename, title) {
+    const safeTitle = escapePrintText(title || 'Cetak 1 Strip');
+    const safeFilename = escapePrintText(filename || 'cetak-1-strip.jpg');
+    const imgJSON = JSON.stringify(imageDataURL);
+
+    return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${safeTitle}</title>
+  <style id="dynamicPrintStyle"></style>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f4f6fb;
+      color: #1D3557;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .controls {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 8px 24px rgba(15,23,42,.08);
+      padding: 14px;
+      backdrop-filter: blur(14px);
+    }
+    .controls h1 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+    .controls p {
+      margin: 0 0 12px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(105px, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #475569;
+    }
+    select, input {
+      width: 100%;
+      border: 1.5px solid #dbe3ef;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 11px;
+      font: inherit;
+      font-size: 13px;
+      color: #0f172a;
+      outline: none;
+    }
+    input[type="range"] { padding: 0; }
+    .btns { display: flex; gap: 8px; align-items: center; }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg,#D84B7E,#E5B842);
+      box-shadow: 0 6px 18px rgba(216,75,126,.22);
+      white-space: nowrap;
+    }
+    button.secondary {
+      color: #1D3557;
+      background: #eef2ff;
+      box-shadow: none;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #64748b;
+    }
+    .preview-wrap {
+      min-height: calc(100vh - 170px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 16px;
+    }
+    .sheet {
+      background: white;
+      box-shadow: 0 14px 40px rgba(15,23,42,.18);
+      overflow: hidden;
+    }
+    .sheet img { display: block; height: auto; }
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .btns { grid-column: 1 / -1; }
+      button { flex: 1; }
+    }
+    @media print {
+      .controls { display: none !important; }
+      .preview-wrap { padding: 0 !important; min-height: 0 !important; }
+      html, body { width: auto; height: auto; background: white !important; }
+      .sheet { box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>${safeTitle}</h1>
+    <p>Gambar yang dicetak tetap sama seperti generate Cetak 1 Strip. Kamu masih bisa atur printer, copies, warna, dan kualitas di dialog print browser.</p>
+    <div class="grid">
+      <label>Ukuran kertas
+        <select id="paper">
+          <option value="10x15" selected>10 × 15 cm</option>
+          <option value="4r">4R / 10.2 × 15.2 cm</option>
+          <option value="a4">A4</option>
+        </select>
+      </label>
+      <label>Posisi gambar
+        <select id="position">
+          <option value="flex-start" selected>Kiri</option>
+          <option value="center">Tengah</option>
+          <option value="flex-end">Kanan</option>
+        </select>
+      </label>
+      <label>Scale <span id="scaleText">100%</span>
+        <input id="scale" type="range" min="80" max="110" step="1" value="100">
+      </label>
+      <label>Margin <span id="marginText">0 mm</span>
+        <input id="margin" type="range" min="0" max="8" step="1" value="0">
+      </label>
+      <div class="btns">
+        <button type="button" onclick="window.print()">Print</button>
+        <button type="button" class="secondary" onclick="downloadImage()">Download</button>
+      </div>
+    </div>
+    <div class="note">Tip: di dialog print, pilih ukuran kertas yang sama, nonaktifkan header/footer, dan pakai scale 100% kalau ingin ukuran presisi.</div>
+  </div>
+  <div class="preview-wrap">
+    <div class="sheet" id="sheet">
+      <img id="printImg" alt="${safeFilename}">
+    </div>
+  </div>
+  <script>
+    const imageDataURL = ${imgJSON};
+    const filename = ${JSON.stringify(filename || 'cetak-1-strip.jpg')};
+    const sizes = {
+      '10x15': { w: 10, h: 15, label: '10 × 15 cm' },
+      '4r':   { w: 10.2, h: 15.2, label: '4R' },
+      'a4':   { w: 21, h: 29.7, label: 'A4' }
+    };
+    const img = document.getElementById('printImg');
+    img.src = imageDataURL;
+
+    function updatePrintLayout() {
+      const paper = document.getElementById('paper').value;
+      const pos = document.getElementById('position').value;
+      const scale = Number(document.getElementById('scale').value || 100);
+      const margin = Number(document.getElementById('margin').value || 0);
+      const size = sizes[paper] || sizes['10x15'];
+      const contentW = Math.max(1, size.w - (margin * 2 / 10));
+      const contentH = Math.max(1, size.h - (margin * 2 / 10));
+      const imgW = Math.max(.5, contentW * scale / 100);
+
+      document.getElementById('scaleText').textContent = scale + '%';
+      document.getElementById('marginText').textContent = margin + ' mm';
+
+      const style = document.getElementById('dynamicPrintStyle');
+      style.textContent =
+        '@page{size:' + size.w + 'cm ' + size.h + 'cm;margin:0;}' +
+        '.sheet{width:' + size.w + 'cm;height:' + size.h + 'cm;padding:' + margin + 'mm;display:flex;align-items:flex-start;justify-content:' + pos + ';}' +
+        '.sheet img{width:' + imgW + 'cm;max-width:' + contentW + 'cm;max-height:' + contentH + 'cm;object-fit:contain;}' +
+        '@media screen{.sheet{transform-origin:top center;}}';
+    }
+
+    function downloadImage() {
+      const a = document.createElement('a');
+      a.href = imageDataURL;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    ['paper','position','scale','margin'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updatePrintLayout);
+      document.getElementById(id).addEventListener('change', updatePrintLayout);
+    });
+
+    updatePrintLayout();
+    img.onload = () => setTimeout(() => window.print(), 450);
+  <\/script>
+</body>
+</html>`;
+  }
+
+  async function openPrintSetupWindow(blob, filename, title) {
+    if (!blob) throw new Error('Blob kosong');
+
+    const imageDataURL = await blobToDataURL(blob);
+    const popup = window.open('', '_blank', 'width=980,height=820');
+
+    if (!popup) {
+      // Fallback kalau popup diblokir: tetap buka print langsung via iframe.
+      const existing = document.getElementById('printFrame');
+      if (existing) existing.remove();
+
+      const iframe = document.createElement('iframe');
+      iframe.id = 'printFrame';
+      iframe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;border:none;';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head>
+        <style>
+          @page { size: 10cm 15cm; margin: 0; }
+          * { margin:0; padding:0; box-sizing:border-box; }
+          body { width:10cm; height:15cm; background:white; }
+          img { width:10cm; height:auto; display:block; }
+        </style>
+      </head><body><img src="${imageDataURL}" onload="setTimeout(function(){window.print()},250)"></body></html>`);
+      doc.close();
+      return 'iframe';
+    }
+
+    popup.document.open();
+    popup.document.write(buildPrintWindowHTML(imageDataURL, filename, title));
+    popup.document.close();
+    popup.focus();
+    return 'print';
+  }
+
+
+
+  // ─── Share Strip helpers ───────────────────────────────────────────────────
+  async function buildSingleStripBlobForShare() {
+    if (!finalDataURL) throw new Error('Foto belum siap');
+
+    if (isPhotoboxMode) {
+      return dataURLtoBlob(finalDataURL);
+    }
+
+    // Share 1 strip = file strip 5×15 tanpa area kosong.
+    const STRIP_W = 590;
+    const STRIP_H = 1772;
+    const canvas  = document.createElement('canvas');
+    canvas.width  = STRIP_W;
+    canvas.height = STRIP_H;
+    const ctx = canvas.getContext('2d');
+
+    const img = await loadImageSafe(finalDataURL);
+    const scale = Math.max(STRIP_W / img.width, STRIP_H / img.height);
+    const sw = STRIP_W / scale;
+    const sh = STRIP_H / scale;
+    const sx = (img.width  - sw) / 2;
+    const sy = (img.height - sh) / 2;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, STRIP_W, STRIP_H);
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, STRIP_W, STRIP_H);
+
+    return await canvasToBlobSafe(canvas, 'image/jpeg', 0.95);
+  }
+
+  async function buildDoubleStripBlobForShare() {
+    if (!finalDataURL) throw new Error('Foto belum siap');
+
+    if (isPhotoboxMode) {
+      return dataURLtoBlob(finalDataURL);
+    }
+
+    // Share 2 strip = file 10×15 dengan 2 strip berdampingan.
+    const STRIP_W = 590;
+    const STRIP_H = 1772;
+    const canvas  = document.createElement('canvas');
+    canvas.width  = STRIP_W * 2;
+    canvas.height = STRIP_H;
+    const ctx = canvas.getContext('2d');
+
+    const img = await loadImageSafe(finalDataURL);
+    const scale = Math.max(STRIP_W / img.width, STRIP_H / img.height);
+    const sw = STRIP_W / scale;
+    const sh = STRIP_H / scale;
+    const sx = (img.width  - sw) / 2;
+    const sy = (img.height - sh) / 2;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, sx, sy, sw, sh, 0,       0, STRIP_W, STRIP_H);
+    ctx.drawImage(img, sx, sy, sw, sh, STRIP_W, 0, STRIP_W, STRIP_H);
+
+    return await canvasToBlobSafe(canvas, 'image/jpeg', 0.95);
+  }
+
+  async function shareStripBlob(blob, filename, label) {
+    const mode = await shareOrDownloadBlob(blob, filename, `LUX Photobooth - ${label}`, {
+      text: `${label} dari LUX Photobooth ✨`,
+      suppressCancel: true
+    });
+
+    if (mode === 'shared') {
+      showStatus(`${label} siap dibagikan ✓`);
+    } else if (mode === 'downloaded') {
+      showStatus('Device/browser belum support share file, jadi file didownload dulu ya.');
+    } else {
+      showStatus(`${label} dibuka di share sheet.`);
+    }
+  }
+
+  async function share1Strip(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => share1Strip(true));
+
+    const btn = document.getElementById('btnShare1Strip');
+    if (!finalDataURL) {
+      showStatus('Foto belum siap. Tunggu hasil selesai dulu ya.');
+      return;
+    }
+
+    btn.disabled = true;
+    const oldLabel = btn.querySelector('.btn-label').textContent;
+    btn.querySelector('.btn-label').textContent = 'Menyiapkan share...';
+
+    try {
+      const blob = await buildSingleStripBlobForShare();
+      const label = isPhotoboxMode ? 'Share 4R' : 'Share 1 Strip';
+      const filename = isPhotoboxMode
+        ? `lux-share-photobox-4r-${Date.now()}.jpg`
+        : `lux-share-1strip-${Date.now()}.jpg`;
+      await shareStripBlob(blob, filename, label);
+    } catch(e) {
+      console.error('share1Strip error:', e);
+      showStatus('Gagal share: ' + (e.message || e), '#e94560');
+    } finally {
+      btn.querySelector('.btn-label').textContent = oldLabel;
+      btn.disabled = false;
+    }
+  }
+
+  async function share2Strip(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => share2Strip(true));
+
+    const btn = document.getElementById('btnShare2Strip');
+    if (!finalDataURL) {
+      showStatus('Foto belum siap. Tunggu hasil selesai dulu ya.');
+      return;
+    }
+
+    btn.disabled = true;
+    const oldLabel = btn.querySelector('.btn-label').textContent;
+    btn.querySelector('.btn-label').textContent = 'Menyiapkan share...';
+
+    try {
+      const blob = await buildDoubleStripBlobForShare();
+      await shareStripBlob(blob, `lux-share-2strip-${Date.now()}.jpg`, 'Share 2 Strip');
+    } catch(e) {
+      console.error('share2Strip error:', e);
+      showStatus('Gagal share 2 strip: ' + (e.message || e), '#e94560');
+    } finally {
+      btn.querySelector('.btn-label').textContent = oldLabel;
+      btn.disabled = false;
+    }
+  }
+
+
+  // ─── Cetak 2 Strip: langsung buka print, bukan Web Share ───
+  async function cetak2Strip() {
+    console.log('[LUX] cetak2Strip print clicked', { hasFinalDataURL: !!finalDataURL });
+    const btn = document.getElementById('btnCetak2Strip');
+    if (!finalDataURL) {
+      showStatus('Foto belum siap. Tunggu hasil selesai dulu ya.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.querySelector('.btn-label').textContent = 'Menyiapkan print...';
+
+    try {
+      const STRIP_W = 590;
+      const STRIP_H = 1772;
+      const canvas  = document.createElement('canvas');
+      canvas.width  = STRIP_W * 2;
+      canvas.height = STRIP_H;
+      const ctx = canvas.getContext('2d');
+
+      const img = await loadImageSafe(finalDataURL);
+      const scale = Math.max(STRIP_W / img.width, STRIP_H / img.height);
+      const sw = STRIP_W / scale;
+      const sh = STRIP_H / scale;
+      const sx = (img.width  - sw) / 2;
+      const sy = (img.height - sh) / 2;
+
+      // Tetap generate file yang sama: 10×15 berisi 2 strip 5×15 berdampingan tanpa gap.
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, sx, sy, sw, sh, 0,       0, STRIP_W, STRIP_H);
+      ctx.drawImage(img, sx, sy, sw, sh, STRIP_W, 0, STRIP_W, STRIP_H);
+
+      const blob = await canvasToBlobSafe(canvas, 'image/jpeg', 0.95);
+      const mode = await openPrintSetupWindow(blob, `lux-cetak2strip-${Date.now()}.jpg`, 'Cetak 2 Strip');
+
+      if (mode === 'print') {
+        showStatus('Membuka halaman print Cetak 2 Strip. Atur kertas, scale, margin, lalu print.');
+      } else {
+        showStatus('Popup diblokir, print langsung dibuka. Kalau belum muncul, izinkan popup browser.');
+      }
+    } catch(e) {
+      console.error('cetak2Strip print error:', e);
+      showStatus('Gagal membuka print Cetak 2 Strip: ' + (e.message || e));
+    } finally {
+      btn.querySelector('.btn-label').textContent = 'Cetak 2 Strip';
+      btn.disabled = false;
+    }
+  }
+
+  // ─── Cetak 1 Strip / Cetak 4R: langsung buka print, bukan Web Share ───
+  async function shareNative() {
+    console.log('[LUX] print clicked', { hasFinalDataURL: !!finalDataURL, isPhotoboxMode });
+    const btn = document.getElementById('btnShare');
+    if (!finalDataURL) {
+      showStatus('Foto belum siap. Tunggu hasil selesai dulu ya.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.querySelector('.btn-label').textContent = 'Menyiapkan print...';
+
+    try {
+      let blob, filename, title;
+
+      if (isPhotoboxMode) {
+        // Photobox: hasilnya sudah full 4R/10×15, jadi langsung print hasil final.
+        blob = dataURLtoBlob(finalDataURL);
+        filename = `lux-photobox-4r-${Date.now()}.jpg`;
+        title = 'Cetak Photobox 4R';
+      } else {
+        const TOTAL_W = 1181;
+        const STRIP_W = 590;
+        const H = 1772;
+        const canvas  = document.createElement('canvas');
+        canvas.width  = TOTAL_W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+
+        // Tetap generate file yang sama: canvas 10×15 dengan 1 strip 5×15 di sisi kiri.
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, TOTAL_W, H);
+
+        const img = await loadImageSafe(finalDataURL);
+        const scale = Math.max(STRIP_W / img.width, H / img.height);
+        const sw = STRIP_W / scale;
+        const sh = H / scale;
+        const sx = (img.width  - sw) / 2;
+        const sy = (img.height - sh) / 2;
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, STRIP_W, H);
+
+        blob = await canvasToBlobSafe(canvas, 'image/jpeg', 0.95);
+        filename = `lux-cetak1strip-${Date.now()}.jpg`;
+        title = 'Cetak 1 Strip';
+      }
+
+      const mode = await openPrintSetupWindow(blob, filename, title);
+
+      if (mode === 'print') {
+        showStatus(isPhotoboxMode ? 'Membuka halaman print Photobox 4R. Atur kertas, scale, margin, lalu print.' : 'Membuka halaman print. Atur kertas, scale, margin, lalu print.');
+      } else {
+        showStatus('Popup diblokir, print langsung dibuka. Kalau belum muncul, izinkan popup browser.');
+      }
+    } catch(e) {
+      console.error('print error:', e);
+      showStatus('Gagal membuka print: ' + (e.message || e));
+    } finally {
+      btn.querySelector('.btn-label').textContent = isPhotoboxMode ? 'Cetak 4R' : 'Cetak 1 Strip';
+      btn.disabled = false;
+    }
+  }
+
+  // ─── Print ───
+  function printFoto() {
+    if (!finalDataURL) return;
+    // Buat hidden iframe untuk print — lebih compatible dari window.open
+    const existing = document.getElementById('printFrame');
+    if (existing) existing.remove();
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'printFrame';
+    iframe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;border:none;';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head>
+      <style>
+        * { margin:0; padding:0; }
+        body { display:flex; justify-content:center; align-items:flex-start; }
+        img { max-width:100%; height:auto; display:block; page-break-inside:avoid; }
+        @media print { body { margin:0; } img { width:5cm; } }
+      </style>
+    </head><body>
+      <img src="${finalDataURL}" onload="window.print();">
+</body></html>`);
+    doc.close();
+
+    showStatus('Membuka dialog print...');
+  }
+
+  // ─── Download ZIP (works on desktop & mobile) ───
+  async function downloadZip(skipConsent = false) {
+    if (!skipConsent) return ensureResultConsent(() => downloadZip(true));
+    if (!finalDataURL) return;
+    const btn = document.getElementById('btnZip');
+    btn.disabled = true;
+    btn.querySelector('.btn-label').textContent = 'Menyiapkan ZIP...';
+    setProgress('zip', 5);
+
+    try {
+      const zip = new JSZip();
+      const folder = zip.folder('lux-photobooth');
+
+      // 1. Foto utama (composite)
+      setProgress('zip', 15);
+      const jpgBlob = dataURLtoBlob(finalDataURL);
+      folder.file('foto-utama.jpg', jpgBlob);
+
+      // 2. Foto satuan (per slot)
+      setProgress('zip', 25);
+      for (let i = 0; i < filteredPhotos.length; i++) {
+        if (filteredPhotos[i]) {
+          const fBlob = dataURLtoBlob(filteredPhotos[i]);
+          folder.file(`foto-${i+1}.jpg`, fBlob);
+        }
+        setProgress('zip', 25 + Math.round((i+1)/filteredPhotos.length * 20));
+      }
+
+      // 3. GIF (buat dulu kalau belum ada)
+      setProgress('zip', 50);
+      btn.querySelector('.btn-label').textContent = 'Membuat GIF...';
+      if (!gifBlob && filteredPhotos.length >= 2) {
+        try {
+          gifBlob = await makeGif();
+        } catch(e) { /* skip gif jika gagal */ }
+      }
+      if (gifBlob) folder.file('animated.gif', gifBlob);
+
+      // 4. Generate ZIP
+      setProgress('zip', 80);
+      btn.querySelector('.btn-label').textContent = 'Membangun ZIP...';
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+        (meta) => setProgress('zip', 80 + Math.round(meta.percent * 0.18))
+      );
+
+      setProgress('zip', null);
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download Semua (ZIP)';
+
+      // Trigger download
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lux-photobooth-${Date.now()}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+      showStatus('ZIP berhasil didownload ✓');
+
+    } catch(e) {
+      console.error('ZIP error:', e);
+      setProgress('zip', null);
+      btn.disabled = false;
+      btn.querySelector('.btn-label').textContent = 'Download Semua (ZIP)';
+      showStatus('Gagal buat ZIP: ' + e.message, '#e94560');
+    }
+  }
+
+  async function fotoLagi() {
+    ['photos','filteredPhotos','filteredPhotosStore','finalPhoto','finalPhotoThumb','livePhotos'].forEach(k => localStorage.removeItem(k));
+    sessionStorage.removeItem('lux_result_consent_done');
+    await idbDelete('filteredPhotos');
+    await idbDelete('photos');
+    window.location.href = '/';
+  }
+
+  generateResult();
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  }
+</script>
+</body>
+</html>
