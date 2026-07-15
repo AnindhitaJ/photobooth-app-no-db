@@ -65,13 +65,28 @@ for brand_label in ['LUX PHOTOBOOTH', 'lux photobooth']:
     if brand_label not in text:
         errors.append(f'missing photostrip brand label: {brand_label}')
 
-social_match = re.search(r"function drawSocialDecor\(ctx, def\) \{(.*?)\n  \}\n\n\n\n  function drawHeaderRibbon", text, re.S)
+social_match = re.search(r"function drawSocialDecor\(ctx, def\) \{(.*?)\n  \}\n\s*function drawHeaderRibbon", text, re.S)
 social_block = social_match.group(1) if social_match else ''
-if social_block.count('luxphotobootd.id') < 10:
-    errors.append(f'social media templates do not consistently use luxphotobootd.id: {social_block.count("luxphotobootd.id")} occurrences')
-for old_social_brand in ['lux.photobooth', '@luxphotobooth', 'LUX Photos', 'LUX Recents', 'LUX Now Playing', 'LUX Photobooth', 'LUX viral post']:
+if social_block.count('luxphotobooth.id') < 1:
+    errors.append(f'social media templates do not consistently use luxphotobooth.id: {social_block.count("luxphotobooth.id")} occurrences')
+for old_social_brand in ['luxphotobootd.id', 'lux.photobooth', '@luxphotobooth']:
     if old_social_brand in social_block:
         errors.append(f'old social identity remains: {old_social_brand}')
+
+
+# Social photostrip geometry: compact 3-photo layout with no generic name zone.
+for token in [
+    "sidePad = 76;", "topPad = 156;", "bottomPad = 168;", "gap = 32;",
+    "if (def.category !== 'Social Media') drawNameZone(ctx, def, slots);"
+]:
+    if token not in text:
+        errors.append(f'missing compact social layout safeguard: {token}')
+if "const SOCIAL_ID = 'luxphotobooth.id';" not in social_block:
+    errors.append('Instagram/TikTok social identity is not luxphotobooth.id')
+if 'metadata is rendered inside each photo card' not in text:
+    errors.append('social inter-slot metadata cleanup is missing')
+if 'luxphotobootd.id' in text:
+    errors.append('misspelled luxphotobootd.id remains in template.html')
 
 index_text = (ROOT / 'index.html').read_text(encoding='utf-8')
 sw_text = (ROOT / 'sw.js').read_text(encoding='utf-8')
