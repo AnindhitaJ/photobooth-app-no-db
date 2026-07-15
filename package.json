@@ -1,9 +1,9 @@
 {
   "name": "lux-photobooth-local",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
-  "description": "Static local-only photobooth PWA: photostrip, 30 photobox 4R layouts, ganci, and two-strip 4R merger.",
+  "description": "Static local-only photobooth PWA: photostrip, 30 themed photobox 4R layouts, ganci, and two-strip 4R merger.",
   "scripts": {
     "validate": "python3 scripts/validate_repo.py",
     "serve": "python3 -m http.server 4173"

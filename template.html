@@ -277,51 +277,51 @@
   }
 
   const PHOTOBOX_DEFS = [
-    // 1 slot
-    { id:'photobox_editorial_one', name:'Editorial Cover', slots:1, layout:'one_editorial', bg:'#f8fafc', accent:'#111827', accent2:'#cbd5e1', ink:'#111827', motif:'minimal', border:'square', title:'EDITORIAL MOMENT' },
-    { id:'photobox_polaroid_one', name:'Polaroid Memory', slots:1, layout:'one_polaroid', bg:'#fff7ed', accent:'#b45309', accent2:'#fed7aa', ink:'#78350f', motif:'paper', border:'polaroid', title:'ONE GOOD MEMORY' },
-    { id:'photobox_cinema_one', name:'Cinema Wide', slots:1, layout:'one_cinema', bg:'#09090b', accent:'#f59e0b', accent2:'#ef4444', ink:'#fff7ed', motif:'film', border:'film', title:'CINEMA FRAME' },
+    // 1 slot — area foto dibuat dominan, tema mengikuti photostrip built-in
+    { id:'photobox_lavender_cloud_one', name:'Lavender Cloud 4R', slots:1, layout:'one_cloud', bg:'#f5efff', accent:'#a78bfa', accent2:'#f9a8d4', ink:'#6d5b8d', motif:'cloud', border:'soft', title:'LAVENDER CLOUD' },
+    { id:'photobox_retro_film_one', name:'Retro Film 4R', slots:1, layout:'one_film', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', motif:'film', border:'film', title:'RETRO FILM' },
+    { id:'photobox_black_gold_one', name:'Black Gold 4R', slots:1, layout:'one_luxury', bg:'#080808', accent:'#d4af37', accent2:'#f5e6a8', ink:'#fff8dc', motif:'luxury', border:'square', title:'BLACK GOLD' },
+    { id:'photobox_sakura_garden_one', name:'Sakura Garden 4R', slots:1, layout:'one_floral', bg:'#fff7f9', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', motif:'sakura', border:'soft', title:'SAKURA GARDEN' },
 
     // 2 slot
-    { id:'photobox_clean_stack', name:'Clean Double Stack', slots:2, layout:'two_stack', bg:'#ffffff', accent:'#1D3557', accent2:'#E5B842', ink:'#1D3557', motif:'minimal', border:'soft', title:'TWO OF US' },
-    { id:'photobox_split_sky', name:'Sky Split Portrait', slots:2, layout:'two_split', bg:'#eff6ff', accent:'#3b82f6', accent2:'#bae6fd', ink:'#1e3a8a', motif:'cloud', border:'pill', title:'SIDE BY SIDE' },
-    { id:'photobox_hero_story', name:'Hero & Detail', slots:2, layout:'two_hero', bg:'#fff1f7', accent:'#D84B7E', accent2:'#f9a8d4', ink:'#1D3557', motif:'hearts', border:'soft', title:'MAIN CHARACTER' },
-    { id:'photobox_diagonal_duo', name:'Asymmetric Duo', slots:2, layout:'two_diagonal', bg:'#f5f3ff', accent:'#8b5cf6', accent2:'#22d3ee', ink:'#4c1d95', motif:'geometry', border:'square', title:'DUO STORY' },
+    { id:'photobox_pink_diary_duo', name:'Pink Diary Duo', slots:2, layout:'two_stack', bg:'#fff1f7', accent:'#fb7185', accent2:'#fbcfe8', ink:'#9f3a58', motif:'diary', border:'soft', title:'PINK DIARY' },
+    { id:'photobox_kodak_yellow_duo', name:'Kodak Yellow Duo', slots:2, layout:'two_split', bg:'#facc15', accent:'#ef4444', accent2:'#111827', ink:'#111827', motif:'film', border:'film', title:'KODAK YELLOW' },
+    { id:'photobox_wedding_elegant_duo', name:'Wedding Elegant Duo', slots:2, layout:'two_hero', bg:'#fffdf7', accent:'#b89b72', accent2:'#e8d9c4', ink:'#5f4b32', motif:'wedding', border:'soft', title:'WEDDING ELEGANT' },
+    { id:'photobox_blue_rose_duo', name:'Blue Rose Duo', slots:2, layout:'two_diagonal', bg:'#eff6ff', accent:'#3b82f6', accent2:'#bfdbfe', ink:'#1e3a8a', motif:'rose', border:'soft', title:'BLUE ROSE' },
 
     // 3 slot
-    { id:'photobox_triptych_navy', name:'Navy Triptych', slots:3, layout:'three_triptych', bg:'#0f172a', accent:'#facc15', accent2:'#38bdf8', ink:'#f8fafc', motif:'stars', border:'square', title:'THREE CHAPTERS' },
-    { id:'photobox_sakura_hero', name:'Sakura Hero Pair', slots:3, layout:'three_hero_pair', bg:'#fff1f7', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', motif:'floral', border:'soft', title:'BLOOM TOGETHER' },
-    { id:'photobox_retro_three', name:'Retro Three Stack', slots:3, layout:'three_stack', bg:'#fef3c7', accent:'#ea580c', accent2:'#84cc16', ink:'#7c2d12', motif:'retro', border:'film', title:'RETRO REPLAY' },
-    { id:'photobox_botanical_three', name:'Botanical Story', slots:3, layout:'three_story', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', motif:'botanical', border:'soft', title:'GREEN MOMENTS' },
+    { id:'photobox_matcha_latte_three', name:'Matcha Latte Story', slots:3, layout:'three_triptych', bg:'#f3fae8', accent:'#86a86b', accent2:'#d9f99d', ink:'#3f6212', motif:'latte', border:'soft', title:'MATCHA LATTE' },
+    { id:'photobox_warm_polaroid_three', name:'Warm Polaroid Triptych', slots:3, layout:'three_hero_pair', bg:'#fff7ed', accent:'#0f172a', accent2:'#f97316', ink:'#0f172a', motif:'polaroid', border:'polaroid', title:'WARM POLAROID' },
+    { id:'photobox_champagne_gold_three', name:'Champagne Gold Trio', slots:3, layout:'three_stack', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', motif:'pearl', border:'soft', title:'CHAMPAGNE GOLD' },
+    { id:'photobox_wild_flower_three', name:'Wild Flower Story', slots:3, layout:'three_story', bg:'#fffaf2', accent:'#f97316', accent2:'#a7f3d0', ink:'#7c2d12', motif:'wild', border:'soft', title:'WILD FLOWER' },
 
     // 4 slot
-    { id:'photobox_soft_pink_grid', name:'Soft Pink Grid', slots:4, layout:'four_grid', bg:'#fff1f7', accent:'#D84B7E', accent2:'#f9a8d4', ink:'#1D3557', motif:'dots', border:'soft', title:'PHOTOBOX 4R' },
-    { id:'photobox_monochrome_stack', name:'Monochrome Stack', slots:4, layout:'four_stack', bg:'#f8fafc', accent:'#111827', accent2:'#94a3b8', ink:'#111827', motif:'grid', border:'square', title:'CONTACT NOTES' },
-    { id:'photobox_gold_feature', name:'Gold Feature + Three', slots:4, layout:'four_hero_three', bg:'#fff8e1', accent:'#b58935', accent2:'#E5B842', ink:'#65420c', motif:'sparkle', border:'soft', title:'GOLDEN HOUR' },
-    { id:'photobox_arcade_four', name:'Arcade Four', slots:4, layout:'four_grid_wide', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', motif:'neon', border:'square', title:'PLAYER SELECT' },
-    { id:'photobox_film_bands', name:'Film Bands', slots:4, layout:'four_bands', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', motif:'film', border:'film', title:'ROLL 04' },
+    { id:'photobox_sky_blue_four', name:'Sky Blue Grid', slots:4, layout:'four_grid', bg:'#eff6ff', accent:'#60a5fa', accent2:'#bae6fd', ink:'#1e40af', motif:'cloud', border:'soft', title:'SKY BLUE' },
+    { id:'photobox_noir_contact_four', name:'Noir Contact Sheet', slots:4, layout:'four_stack', bg:'#030712', accent:'#f8fafc', accent2:'#525252', ink:'#ffffff', motif:'film', border:'film', title:'NOIR CONTACT' },
+    { id:'photobox_rose_gold_four', name:'Rose Gold Feature', slots:4, layout:'four_hero_three', bg:'#fff1f2', accent:'#be6f79', accent2:'#f5c2c7', ink:'#7f3340', motif:'pearl', border:'soft', title:'ROSE GOLD' },
+    { id:'photobox_arcade_neon_four', name:'Arcade Neon', slots:4, layout:'four_grid_wide', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', motif:'arcade', border:'square', title:'ARCADE NEON' },
 
     // 5 slot
-    { id:'photobox_matcha_five', name:'Matcha Feature Five', slots:5, layout:'five_feature', bg:'#f3fae8', accent:'#84a96b', accent2:'#d9f99d', ink:'#365314', motif:'botanical', border:'soft', title:'MATCHA DAYS' },
-    { id:'photobox_party_five', name:'Party Hero Five', slots:5, layout:'five_top_hero', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', motif:'confetti', border:'pill', title:'PARTY PEOPLE' },
-    { id:'photobox_lilac_mosaic', name:'Lilac Mosaic Five', slots:5, layout:'five_mosaic', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#f0abfc', ink:'#5b21b6', motif:'geometry', border:'soft', title:'LILAC MEMORIES' },
-    { id:'photobox_newspaper_five', name:'Newspaper Five', slots:5, layout:'five_stripmix', bg:'#f8fafc', accent:'#111827', accent2:'#cbd5e1', ink:'#111827', motif:'paper', border:'square', title:'THE DAILY FRAME' },
+    { id:'photobox_birthday_party_five', name:'Birthday Party Five', slots:5, layout:'five_feature', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', motif:'birthday', border:'pill', title:'BIRTHDAY PARTY' },
+    { id:'photobox_notebook_grid_five', name:'Notebook Grid Five', slots:5, layout:'five_top_hero', bg:'#f8fafc', accent:'#1d4ed8', accent2:'#f87171', ink:'#0f172a', motif:'grid', border:'square', title:'NOTEBOOK GRID' },
+    { id:'photobox_botanical_green_five', name:'Botanical Green Five', slots:5, layout:'five_mosaic', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', motif:'leaf', border:'soft', title:'BOTANICAL GREEN' },
+    { id:'photobox_instagram_feed_five', name:'Instagram Feed Five', slots:5, layout:'five_stripmix', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' },
 
     // 6 slot
-    { id:'photobox_blue_six', name:'Blue Six Grid', slots:6, layout:'six_grid_2x3', bg:'#eff6ff', accent:'#60a5fa', accent2:'#bae6fd', ink:'#1e3a8a', motif:'cloud', border:'soft', title:'SIX SMALL JOYS' },
-    { id:'photobox_summer_six', name:'Summer Six Landscape', slots:6, layout:'six_grid_3x2', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', motif:'waves', border:'pill', title:'SUMMER ROLL' },
-    { id:'photobox_midnight_six', name:'Midnight Hero Six', slots:6, layout:'six_hero_five', bg:'#020617', accent:'#facc15', accent2:'#a78bfa', ink:'#f8fafc', motif:'stars', border:'square', title:'MIDNIGHT FILES' },
-    { id:'photobox_checker_six', name:'Checker Story Six', slots:6, layout:'six_story', bg:'#fff7ed', accent:'#111827', accent2:'#fb7185', ink:'#111827', motif:'checker', border:'film', title:'CHECKER STORY' },
+    { id:'photobox_summer_vacation_six', name:'Summer Vacation Six', slots:6, layout:'six_grid_2x3', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', motif:'summer', border:'pill', title:'SUMMER VACATION' },
+    { id:'photobox_pixel_quest_six', name:'Pixel Quest Six', slots:6, layout:'six_grid_3x2', bg:'#111827', accent:'#22c55e', accent2:'#facc15', ink:'#f8fafc', motif:'pixel', border:'square', title:'PIXEL QUEST' },
+    { id:'photobox_candy_stripe_six', name:'Candy Stripe Six', slots:6, layout:'six_hero_five', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#7c2d12', motif:'stripe', border:'soft', title:'CANDY STRIPE' },
+    { id:'photobox_camera_roll_six', name:'Camera Roll Six', slots:6, layout:'six_story', bg:'#f8fafc', accent:'#111827', accent2:'#94a3b8', ink:'#111827', motif:'cameraRoll', border:'square', title:'CAMERA ROLL' },
 
     // 7 slot
-    { id:'photobox_champagne_seven', name:'Champagne Seven', slots:7, layout:'seven_3_4', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', motif:'sparkle', border:'soft', title:'SEVEN TOASTS' },
-    { id:'photobox_neon_seven', name:'Neon Feature Seven', slots:7, layout:'seven_feature', bg:'#09090b', accent:'#22d3ee', accent2:'#f43f5e', ink:'#ffffff', motif:'neon', border:'square', title:'NIGHT SEQUENCE' },
-    { id:'photobox_valentine_seven', name:'Valentine Story Seven', slots:7, layout:'seven_story', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', motif:'hearts', border:'soft', title:'SEVEN LOVE NOTES' },
+    { id:'photobox_valentine_seven', name:'Valentine Seven', slots:7, layout:'seven_3_4', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', motif:'valentine', border:'soft', title:'VALENTINE' },
+    { id:'photobox_royal_navy_seven', name:'Royal Navy Seven', slots:7, layout:'seven_feature', bg:'#0f172a', accent:'#facc15', accent2:'#38bdf8', ink:'#f8fafc', motif:'royal', border:'square', title:'ROYAL NAVY' },
+    { id:'photobox_pastel_arcade_seven', name:'Pastel Arcade Seven', slots:7, layout:'seven_story', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#67e8f9', ink:'#5b21b6', motif:'arcade', border:'soft', title:'PASTEL ARCADE' },
 
     // 8 slot
-    { id:'photobox_contact_eight', name:'Contact Sheet Eight', slots:8, layout:'eight_2x4', bg:'#f8fafc', accent:'#111827', accent2:'#64748b', ink:'#111827', motif:'grid', border:'square', title:'CONTACT SHEET 08' },
-    { id:'photobox_disco_eight', name:'Disco Eight', slots:8, layout:'eight_4x2', bg:'#1e1b4b', accent:'#c084fc', accent2:'#22d3ee', ink:'#f5f3ff', motif:'disco', border:'pill', title:'DISCO MEMORIES' },
-    { id:'photobox_coral_eight', name:'Coral Mosaic Eight', slots:8, layout:'eight_mosaic', bg:'#fff7ed', accent:'#fb7185', accent2:'#fdba74', ink:'#9a3412', motif:'confetti', border:'soft', title:'EIGHT HAPPY FRAMES' }
+    { id:'photobox_christmas_eight', name:'Christmas Eight', slots:8, layout:'eight_2x4', bg:'#f0fdf4', accent:'#dc2626', accent2:'#16a34a', ink:'#14532d', motif:'christmas', border:'soft', title:'CHRISTMAS' },
+    { id:'photobox_checkerboard_eight', name:'Checkerboard Eight', slots:8, layout:'eight_4x2', bg:'#fff7ed', accent:'#111827', accent2:'#fb7185', ink:'#111827', motif:'checker', border:'square', title:'CHECKERBOARD' },
+    { id:'photobox_photo_dump_eight', name:'Photo Dump Eight', slots:8, layout:'eight_mosaic', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' }
   ];
 
   const BUILTIN_FRAME_DEFS = [
@@ -1837,9 +1837,11 @@
     };
 
     switch (layout) {
-      case 'one_editorial': add(106, 228, 969, 1210); break;
-      case 'one_polaroid': add(156, 255, 869, 1050); break;
-      case 'one_cinema': add(96, 405, 989, 720); break;
+      // Single-photo templates intentionally use almost the full printable area.
+      case 'one_cloud': add(70, 190, 1041, 1450); break;
+      case 'one_film': add(82, 205, 1017, 1428); break;
+      case 'one_luxury': add(76, 192, 1029, 1446); break;
+      case 'one_floral': add(86, 205, 1009, 1428); break;
 
       case 'two_stack': grid(1, 2, 88, 230, 1005, 1190, 46); break;
       case 'two_split': grid(2, 1, 78, 250, 1025, 1170, 34); break;
@@ -1886,52 +1888,114 @@
     const a = def.accent;
     const b = def.accent2;
 
-    if (motif === 'minimal') {
-      for (let i = -H; i < W; i += 90) line(ctx, i, 0, i + H, H, withAlpha(a, .055), 2);
-    } else if (motif === 'grid') {
+    const drawPaper = () => {
+      for (let y = 100; y < H; y += 54) line(ctx, 0, y, W, y, withAlpha(a, .08), 1);
+      line(ctx, 128, 0, 128, H, withAlpha('#ef4444', .12), 2);
+      for (let i = 0; i < 80; i++) circle(ctx, (i * 151) % W, (i * 97) % H, 2, withAlpha(a, .08));
+    };
+    const drawFilm = () => {
+      ctx.fillStyle = withAlpha(a, .12); ctx.fillRect(0, 0, W, 78); ctx.fillRect(0, H - 78, W, 78);
+      for (let x = 24; x < W; x += 72) {
+        roundRect(ctx, x, 20, 38, 30, 5, withAlpha(b, .72));
+        roundRect(ctx, x, H - 50, 38, 30, 5, withAlpha(b, .72));
+      }
+      for (let i = 0; i < 150; i++) circle(ctx, (i * 83) % W, (i * 137) % H, 1 + (i % 3), withAlpha('#ffffff', .12));
+    };
+    const drawFloral = (leafOnly = false) => {
+      for (let i = 0; i < 42; i++) {
+        const x = 32 + (i * 181) % (W - 64), y = 48 + (i * 223) % (H - 96);
+        ctx.save(); ctx.translate(x, y); ctx.rotate((i % 8) * Math.PI / 4);
+        ctx.fillStyle = withAlpha(i % 2 ? a : b, leafOnly ? .15 : .21);
+        ctx.beginPath(); ctx.ellipse(0, 0, 8 + (i % 3) * 4, 22 + (i % 4) * 3, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        if (!leafOnly && i % 3 === 0) circle(ctx, x, y, 6, withAlpha(a, .30));
+      }
+    };
+    const drawHearts = () => {
+      for (let i = 0; i < 60; i++) text(ctx, i % 2 ? '♡' : '♥', 28 + (i * 67) % (W - 56), 70 + (i * 109) % (H - 140), 16 + (i % 3) * 4, withAlpha(i % 2 ? a : b, .18), 800);
+    };
+    const drawStars = (alpha = .23) => {
+      for (let i = 0; i < 80; i++) text(ctx, i % 3 ? '✦' : '★', 24 + (i * 79) % (W - 48), 64 + (i * 131) % (H - 128), 10 + (i % 4) * 4, withAlpha(i % 2 ? a : b, alpha), 800);
+    };
+    const drawConfettiPattern = () => {
+      for (let i = 0; i < 120; i++) {
+        const x = (i * 97) % W, y = (i * 173) % H;
+        ctx.save(); ctx.translate(x, y); ctx.rotate(i * .67);
+        ctx.fillStyle = withAlpha(i % 2 ? a : b, .24); ctx.fillRect(-3, -10, 6, 20); ctx.restore();
+      }
+    };
+    const drawGrid = () => {
       for (let x = 0; x < W; x += 72) line(ctx, x, 0, x, H, withAlpha(a, .09), 1);
       for (let y = 0; y < H; y += 72) line(ctx, 0, y, W, y, withAlpha(b, .10), 1);
-    } else if (motif === 'checker') {
-      const s = 72;
-      for (let y = 0; y < H; y += s) for (let x = 0; x < W; x += s) {
-        if (((x / s) + (y / s)) % 2 === 0) { ctx.fillStyle = withAlpha(a, .09); ctx.fillRect(x, y, s, s); }
+    };
+
+    if (motif === 'minimal') {
+      for (let i = -H; i < W; i += 90) line(ctx, i, 0, i + H, H, withAlpha(a, .055), 2);
+    } else if (motif === 'grid' || motif === 'cameraRoll' || motif === 'igfeed') {
+      drawGrid();
+      if (motif === 'igfeed') {
+        for (let i = 0; i < 18; i++) {
+          const x = 28 + (i * 211) % (W - 80), y = 52 + (i * 157) % (H - 110);
+          roundRect(ctx, x, y, 40, 40, 12, withAlpha(i % 2 ? a : b, .12));
+          circle(ctx, x + 20, y + 20, 8, withAlpha(def.ink, .13));
+        }
       }
-    } else if (motif === 'waves') {
+    } else if (motif === 'checker' || motif === 'pixel') {
+      const s = motif === 'pixel' ? 48 : 72;
+      for (let y = 0; y < H; y += s) for (let x = 0; x < W; x += s) {
+        if (((x / s) + (y / s)) % 2 === 0) { ctx.fillStyle = withAlpha(a, motif === 'pixel' ? .14 : .09); ctx.fillRect(x, y, s, s); }
+      }
+      if (motif === 'pixel') for (let i = 0; i < 38; i++) roundRect(ctx, (i * 103) % W, (i * 173) % H, 14 + (i % 3) * 8, 14 + (i % 3) * 8, 2, withAlpha(i % 2 ? a : b, .24));
+    } else if (motif === 'stripe') {
+      ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(-0.24); ctx.translate(-W / 2, -H / 2);
+      for (let y = -H; y < H * 2; y += 88) { ctx.fillStyle = withAlpha((Math.floor(y / 88) % 2) ? a : b, .18); ctx.fillRect(-W, y, W * 3, 34); }
+      ctx.restore();
+    } else if (motif === 'waves' || motif === 'summer') {
       for (let y = 40; y < H; y += 90) {
         ctx.beginPath(); ctx.strokeStyle = withAlpha((y / 90) % 2 ? a : b, .15); ctx.lineWidth = 4;
         ctx.moveTo(0, y);
         for (let x = 0; x <= W; x += 50) ctx.quadraticCurveTo(x + 25, y - 18, x + 50, y);
         ctx.stroke();
       }
-    } else if (motif === 'film') {
-      ctx.fillStyle = withAlpha(a, .12); ctx.fillRect(0, 0, W, 78); ctx.fillRect(0, H - 78, W, 78);
-      for (let x = 24; x < W; x += 72) { roundRect(ctx, x, 20, 38, 30, 5, withAlpha(b, .72)); roundRect(ctx, x, H - 50, 38, 30, 5, withAlpha(b, .72)); }
-      for (let i = 0; i < 150; i++) circle(ctx, (i * 83) % W, (i * 137) % H, 1 + (i % 3), withAlpha('#ffffff', .12));
-    } else if (motif === 'paper') {
-      for (let y = 100; y < H; y += 54) line(ctx, 0, y, W, y, withAlpha(a, .08), 1);
-      line(ctx, 128, 0, 128, H, withAlpha('#ef4444', .12), 2);
-      for (let i = 0; i < 80; i++) circle(ctx, (i * 151) % W, (i * 97) % H, 2, withAlpha(a, .08));
+      if (motif === 'summer') for (let i = 0; i < 20; i++) text(ctx, i % 2 ? '☀' : '✦', 35 + (i * 151) % (W - 70), 70 + (i * 217) % (H - 140), 20, withAlpha(i % 2 ? a : b, .19), 800);
+    } else if (['film', 'grain', 'cinema'].includes(motif)) {
+      drawFilm();
+    } else if (['paper', 'diary', 'polaroid'].includes(motif)) {
+      drawPaper();
+      if (motif === 'diary') for (let i = 0; i < 18; i++) text(ctx, i % 2 ? '♡' : '✎', 32 + (i * 127) % (W - 64), 78 + (i * 181) % (H - 156), 20, withAlpha(i % 2 ? a : b, .18), 800);
+      if (motif === 'polaroid') for (let i = 0; i < 14; i++) { ctx.save(); ctx.translate(50 + (i * 177) % (W - 100), 62 + (i * 239) % (H - 124)); ctx.rotate((i % 2 ? 1 : -1) * .16); roundRect(ctx, -28, -9, 56, 18, 4, withAlpha('#fef3c7', .55)); ctx.restore(); }
     } else if (motif === 'cloud') {
       for (let i = 0; i < 24; i++) {
         const x = (i * 211) % W, y = 80 + (i * 173) % (H - 160);
         circle(ctx, x, y, 28 + (i % 3) * 10, withAlpha(i % 2 ? a : b, .12));
         circle(ctx, x + 34, y + 8, 22 + (i % 2) * 8, withAlpha(i % 2 ? a : b, .10));
       }
-    } else if (motif === 'floral' || motif === 'botanical') {
-      for (let i = 0; i < 36; i++) {
-        const x = 34 + (i * 181) % (W - 68), y = 52 + (i * 223) % (H - 104);
-        ctx.save(); ctx.translate(x, y); ctx.rotate((i % 8) * Math.PI / 4);
-        ctx.fillStyle = withAlpha(i % 2 ? a : b, motif === 'floral' ? .20 : .16);
-        ctx.beginPath(); ctx.ellipse(0, 0, 8 + (i % 3) * 4, 22 + (i % 4) * 3, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-        if (motif === 'floral' && i % 3 === 0) circle(ctx, x, y, 6, withAlpha(a, .28));
+    } else if (['floral', 'sakura', 'rose', 'wild'].includes(motif)) {
+      drawFloral(false);
+    } else if (['botanical', 'leaf', 'latte'].includes(motif)) {
+      drawFloral(true);
+      if (motif === 'latte') for (let i = 0; i < 18; i++) circle(ctx, 46 + (i * 179) % (W - 92), 64 + (i * 227) % (H - 128), 18 + (i % 3) * 6, withAlpha(i % 2 ? a : b, .10));
+    } else if (['hearts', 'valentine'].includes(motif)) {
+      drawHearts();
+    } else if (['stars', 'sparkle', 'royal'].includes(motif)) {
+      drawStars(motif === 'royal' ? .18 : .23);
+      if (motif === 'royal') {
+        roundRect(ctx, 18, 18, W - 36, H - 36, 28, null, withAlpha(a, .36), 3);
+        roundRect(ctx, 42, 42, W - 84, H - 84, 22, null, withAlpha(b, .16), 2);
       }
-    } else if (motif === 'hearts') {
-      for (let i = 0; i < 60; i++) text(ctx, i % 2 ? '♡' : '♥', 28 + (i * 67) % (W - 56), 70 + (i * 109) % (H - 140), 16 + (i % 3) * 4, withAlpha(i % 2 ? a : b, .18), 800);
-    } else if (motif === 'stars' || motif === 'sparkle') {
-      for (let i = 0; i < 80; i++) text(ctx, i % 3 ? '✦' : '★', 24 + (i * 79) % (W - 48), 64 + (i * 131) % (H - 128), 10 + (i % 4) * 4, withAlpha(i % 2 ? a : b, motif === 'stars' ? .28 : .20), 800);
-    } else if (motif === 'neon') {
+    } else if (['luxury', 'pearl', 'wedding'].includes(motif)) {
+      const grad = ctx.createRadialGradient(W / 2, H / 3, 40, W / 2, H / 2, W);
+      grad.addColorStop(0, withAlpha(b, .16)); grad.addColorStop(1, def.bg);
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < 44; i++) {
+        const x = 34 + (i * 193) % (W - 68), y = 48 + (i * 251) % (H - 96);
+        if (motif === 'pearl') circle(ctx, x, y, 5 + (i % 3) * 3, withAlpha(i % 2 ? a : b, .18));
+        else text(ctx, i % 3 ? '✦' : '◇', x, y, 12 + (i % 3) * 4, withAlpha(i % 2 ? a : b, .18), 800);
+      }
+      if (motif === 'wedding') drawFloral(true);
+    } else if (['neon', 'arcade'].includes(motif)) {
       const grad = ctx.createLinearGradient(0, 0, W, H); grad.addColorStop(0, def.bg); grad.addColorStop(.5, withAlpha(a, .18)); grad.addColorStop(1, withAlpha(b, .22)); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
-      for (let i = 0; i < 16; i++) { line(ctx, 0, 90 + i * 110, W, 20 + i * 110, withAlpha(i % 2 ? a : b, .18), 3); }
+      for (let i = 0; i < 16; i++) line(ctx, 0, 90 + i * 110, W, 20 + i * 110, withAlpha(i % 2 ? a : b, .18), 3);
+      if (motif === 'arcade') for (let i = 0; i < 28; i++) roundRect(ctx, 28 + (i * 139) % (W - 56), 54 + (i * 197) % (H - 108), 18 + (i % 4) * 7, 18 + (i % 4) * 7, 3, withAlpha(i % 2 ? a : b, .20));
     } else if (motif === 'geometry') {
       for (let i = 0; i < 32; i++) {
         const x = (i * 149) % W, y = (i * 211) % H, size = 20 + (i % 5) * 12;
@@ -1941,11 +2005,11 @@
       const grad = ctx.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, withAlpha(a, .10)); grad.addColorStop(1, withAlpha(b, .16)); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
       for (let y = 0; y < H; y += 84) { ctx.fillStyle = withAlpha(y % 168 ? a : b, .08); ctx.fillRect(0, y, W, 42); }
       for (let i = 0; i < 30; i++) circle(ctx, 40 + (i * 173) % (W - 80), 50 + (i * 109) % (H - 100), 10 + (i % 4) * 5, withAlpha(a, .12));
-    } else if (motif === 'confetti') {
-      for (let i = 0; i < 120; i++) {
-        const x = (i * 97) % W, y = (i * 173) % H;
-        ctx.save(); ctx.translate(x, y); ctx.rotate(i * .67); ctx.fillStyle = withAlpha(i % 2 ? a : b, .24); ctx.fillRect(-3, -10, 6, 20); ctx.restore();
-      }
+    } else if (['confetti', 'birthday'].includes(motif)) {
+      drawConfettiPattern();
+    } else if (motif === 'christmas') {
+      drawStars(.18);
+      for (let i = 0; i < 28; i++) text(ctx, i % 2 ? '❄' : '✦', 30 + (i * 151) % (W - 60), 70 + (i * 227) % (H - 140), 18 + (i % 3) * 4, withAlpha(i % 2 ? a : b, .22), 800);
     } else if (motif === 'disco') {
       const grad = ctx.createRadialGradient(W / 2, H / 3, 40, W / 2, H / 3, W); grad.addColorStop(0, withAlpha(a, .28)); grad.addColorStop(1, def.bg); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
       for (let y = 0; y < H; y += 58) for (let x = 0; x < W; x += 58) { ctx.fillStyle = withAlpha((x + y) % 116 ? a : b, .12); ctx.fillRect(x + 3, y + 3, 48, 48); }
@@ -1970,21 +2034,18 @@
     roundRect(ctx, 34, 34, W - 68, H - 68, 42, withAlpha('#ffffff', .08), withAlpha(def.accent, .42), 4);
     roundRect(ctx, 58, 58, W - 116, H - 116, 34, null, withAlpha(def.accent2, .30), 2);
 
-    text(ctx, def.title || 'PHOTOBOX 4R', W / 2, 110, 31, def.ink, 950);
-    text(ctx, 'lux photobooth', W / 2, 150, 18, withAlpha(def.ink, .62), 800);
-    text(ctx, 'print size 10×15', W / 2, H - 114, 20, withAlpha(def.ink, .68), 800);
-    text(ctx, `${slots.length} FRAME${slots.length > 1 ? 'S' : ''}  ·  LUX PHOTOBOOTH`, W / 2, H - 72, 20, def.accent, 900);
+    const heading = def.title || 'LUX PHOTOBOOTH';
+    const headingSize = heading.length > 16 ? 25 : (heading.length > 12 ? 28 : 31);
+    text(ctx, heading, W / 2, 110, headingSize, def.ink, 950);
+    text(ctx, 'lux photobooth', W / 2, H - 62, 18, withAlpha(def.ink, .68), 850);
 
     const borderStyle = def.border || 'soft';
     const outerRadius = borderStyle === 'square' || borderStyle === 'film' ? 8 : (borderStyle === 'pill' ? 42 : 28);
     const borderWidth = borderStyle === 'film' ? 10 : 5;
-    slots.forEach((s, idx) => {
+    slots.forEach((s) => {
       ctx.clearRect(s.x, s.y, s.w, s.h);
       roundRect(ctx, s.x - 12, s.y - 12, s.w + 24, s.h + 24, outerRadius, null, withAlpha(def.accent, .76), borderWidth);
       roundRect(ctx, s.x - 2, s.y - 2, s.w + 4, s.h + 4, Math.max(4, outerRadius - 8), null, withAlpha('#ffffff', .92), 3);
-      const badgeW = Math.min(116, Math.max(72, s.w * .32));
-      roundRect(ctx, s.x + 14, s.y + 14, badgeW, 32, 14, withAlpha(def.bg, .90), withAlpha(def.accent2, .42), 1.5);
-      text(ctx, String(idx + 1).padStart(2, '0'), s.x + 14 + badgeW / 2, s.y + 36, 14, def.ink, 950);
     });
 
     const data = { src: c.toDataURL('image/png'), slots, w: W, h: H };
@@ -2228,7 +2289,7 @@
   if (isPhotoboxMode) {
     document.title = 'Pilih Template Photobox 4R - LUX Photobooth';
     document.querySelector('h2').textContent = 'Pilih Template Photobox 4R';
-    document.querySelector('.sub').textContent = `${PHOTOBOX_DEFS.length} template built-in 10×15 / 4R tersedia`;
+    document.querySelector('.sub').textContent = `${PHOTOBOX_DEFS.length} template built-in Photobox 4R tersedia`;
     document.getElementById('btnLanjut').textContent = 'Mulai Photobox →';
   } else {
     document.querySelector('.sub').textContent = `${FRAME_COLORS.length + BUILTIN_FRAME_DEFS.length} template photostrip built-in tersedia tanpa login`;

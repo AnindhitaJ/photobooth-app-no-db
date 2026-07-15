@@ -5,7 +5,7 @@ Versi ini mempertahankan visual dan alur kamera utama dari project awal, tetapi 
 ## Produk aktif
 
 - Photostrip 5×15.
-- Photobox 4R / 10×15.
+- Photobox 4R.
 - Ganci.
 - Gabung dua photostrip dari galeri HP menjadi satu lembar 4R siap download.
 
@@ -19,7 +19,7 @@ Versi ini mempertahankan visual dan alur kamera utama dari project awal, tetapi 
 ## Template bawaan
 
 - Photostrip: 146 template bawaan, terdiri dari 26 warna Basic dan 120 tema dekoratif.
-- Photobox 4R: 30 template bawaan dengan layout 1–8 slot, termasuk grid, hero, split, stack, triptych, contact sheet, dan mosaic.
+- Photobox 4R: 30 template bawaan dengan layout 1–8 slot. Tema visual mengikuti koleksi photostrip built-in—Korean, Film, Elegant, Floral, Seasonal, Gaming, Pattern, dan Social Media. Template 1-slot memakai area foto yang lebih dominan, tanpa tulisan ukuran cetak, jumlah frame, atau badge nomor di dalam desain.
 - Ganci: frame bawaan tetap tersedia pada halaman Ganci.
 
 ## Gabung 2 Photostrip
