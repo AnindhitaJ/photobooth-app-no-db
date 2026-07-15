@@ -1,6 +1,6 @@
 {
   "name": "lux-photobooth-local",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "type": "module",
   "description": "Static local-only photobooth PWA: photostrip, 30 themed photobox 4R layouts, ganci, and two-strip 4R merger.",

@@ -262,6 +262,7 @@
   ];
   const HIDDEN_CATEGORIES = [];
   const PHOTOBOX_CATEGORY = 'Photobox 4R';
+  const PHOTOBOX_CATEGORIES = ['Basic', ...BUILTIN_CATEGORIES];
   const PHOTOBOX_W = 1181;
   const PHOTOBOX_H = 1772;
   const isEventMode = false;
@@ -278,50 +279,50 @@
 
   const PHOTOBOX_DEFS = [
     // 1 slot — area foto dibuat dominan, tema mengikuti photostrip built-in
-    { id:'photobox_lavender_cloud_one', name:'Lavender Cloud 4R', slots:1, layout:'one_cloud', bg:'#f5efff', accent:'#a78bfa', accent2:'#f9a8d4', ink:'#6d5b8d', motif:'cloud', border:'soft', title:'LAVENDER CLOUD' },
-    { id:'photobox_retro_film_one', name:'Retro Film 4R', slots:1, layout:'one_film', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', motif:'film', border:'film', title:'RETRO FILM' },
-    { id:'photobox_black_gold_one', name:'Black Gold 4R', slots:1, layout:'one_luxury', bg:'#080808', accent:'#d4af37', accent2:'#f5e6a8', ink:'#fff8dc', motif:'luxury', border:'square', title:'BLACK GOLD' },
-    { id:'photobox_sakura_garden_one', name:'Sakura Garden 4R', slots:1, layout:'one_floral', bg:'#fff7f9', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', motif:'sakura', border:'soft', title:'SAKURA GARDEN' },
+    { id:'photobox_lavender_cloud_one', category:'Korean', name:'Lavender Cloud 4R', slots:1, layout:'one_cloud', bg:'#f5efff', accent:'#a78bfa', accent2:'#f9a8d4', ink:'#6d5b8d', motif:'cloud', border:'soft', title:'LAVENDER CLOUD' },
+    { id:'photobox_retro_film_one', category:'Film', name:'Retro Film 4R', slots:1, layout:'one_film', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', motif:'film', border:'film', title:'RETRO FILM' },
+    { id:'photobox_black_gold_one', category:'Elegant', name:'Black Gold 4R', slots:1, layout:'one_luxury', bg:'#080808', accent:'#d4af37', accent2:'#f5e6a8', ink:'#fff8dc', motif:'luxury', border:'square', title:'BLACK GOLD' },
+    { id:'photobox_sakura_garden_one', category:'Floral', name:'Sakura Garden 4R', slots:1, layout:'one_floral', bg:'#fff7f9', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', motif:'sakura', border:'soft', title:'SAKURA GARDEN' },
 
     // 2 slot
-    { id:'photobox_pink_diary_duo', name:'Pink Diary Duo', slots:2, layout:'two_stack', bg:'#fff1f7', accent:'#fb7185', accent2:'#fbcfe8', ink:'#9f3a58', motif:'diary', border:'soft', title:'PINK DIARY' },
-    { id:'photobox_kodak_yellow_duo', name:'Kodak Yellow Duo', slots:2, layout:'two_split', bg:'#facc15', accent:'#ef4444', accent2:'#111827', ink:'#111827', motif:'film', border:'film', title:'KODAK YELLOW' },
-    { id:'photobox_wedding_elegant_duo', name:'Wedding Elegant Duo', slots:2, layout:'two_hero', bg:'#fffdf7', accent:'#b89b72', accent2:'#e8d9c4', ink:'#5f4b32', motif:'wedding', border:'soft', title:'WEDDING ELEGANT' },
-    { id:'photobox_blue_rose_duo', name:'Blue Rose Duo', slots:2, layout:'two_diagonal', bg:'#eff6ff', accent:'#3b82f6', accent2:'#bfdbfe', ink:'#1e3a8a', motif:'rose', border:'soft', title:'BLUE ROSE' },
+    { id:'photobox_pink_diary_duo', category:'Korean', name:'Pink Diary Duo', slots:2, layout:'two_stack', bg:'#fff1f7', accent:'#fb7185', accent2:'#fbcfe8', ink:'#9f3a58', motif:'diary', border:'soft', title:'PINK DIARY' },
+    { id:'photobox_kodak_yellow_duo', category:'Film', name:'Kodak Yellow Duo', slots:2, layout:'two_split', bg:'#facc15', accent:'#ef4444', accent2:'#111827', ink:'#111827', motif:'film', border:'film', title:'KODAK YELLOW' },
+    { id:'photobox_wedding_elegant_duo', category:'Elegant', name:'Wedding Elegant Duo', slots:2, layout:'two_hero', bg:'#fffdf7', accent:'#b89b72', accent2:'#e8d9c4', ink:'#5f4b32', motif:'wedding', border:'soft', title:'WEDDING ELEGANT' },
+    { id:'photobox_blue_rose_duo', category:'Floral', name:'Blue Rose Duo', slots:2, layout:'two_diagonal', bg:'#eff6ff', accent:'#3b82f6', accent2:'#bfdbfe', ink:'#1e3a8a', motif:'rose', border:'soft', title:'BLUE ROSE' },
 
     // 3 slot
-    { id:'photobox_matcha_latte_three', name:'Matcha Latte Story', slots:3, layout:'three_triptych', bg:'#f3fae8', accent:'#86a86b', accent2:'#d9f99d', ink:'#3f6212', motif:'latte', border:'soft', title:'MATCHA LATTE' },
-    { id:'photobox_warm_polaroid_three', name:'Warm Polaroid Triptych', slots:3, layout:'three_hero_pair', bg:'#fff7ed', accent:'#0f172a', accent2:'#f97316', ink:'#0f172a', motif:'polaroid', border:'polaroid', title:'WARM POLAROID' },
-    { id:'photobox_champagne_gold_three', name:'Champagne Gold Trio', slots:3, layout:'three_stack', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', motif:'pearl', border:'soft', title:'CHAMPAGNE GOLD' },
-    { id:'photobox_wild_flower_three', name:'Wild Flower Story', slots:3, layout:'three_story', bg:'#fffaf2', accent:'#f97316', accent2:'#a7f3d0', ink:'#7c2d12', motif:'wild', border:'soft', title:'WILD FLOWER' },
+    { id:'photobox_matcha_latte_three', category:'Korean', name:'Matcha Latte Story', slots:3, layout:'three_triptych', bg:'#f3fae8', accent:'#86a86b', accent2:'#d9f99d', ink:'#3f6212', motif:'latte', border:'soft', title:'MATCHA LATTE' },
+    { id:'photobox_warm_polaroid_three', category:'Film', name:'Warm Polaroid Triptych', slots:3, layout:'three_hero_pair', bg:'#fff7ed', accent:'#0f172a', accent2:'#f97316', ink:'#0f172a', motif:'polaroid', border:'polaroid', title:'WARM POLAROID' },
+    { id:'photobox_champagne_gold_three', category:'Elegant', name:'Champagne Gold Trio', slots:3, layout:'three_stack', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', motif:'pearl', border:'soft', title:'CHAMPAGNE GOLD' },
+    { id:'photobox_wild_flower_three', category:'Floral', name:'Wild Flower Story', slots:3, layout:'three_story', bg:'#fffaf2', accent:'#f97316', accent2:'#a7f3d0', ink:'#7c2d12', motif:'wild', border:'soft', title:'WILD FLOWER' },
 
     // 4 slot
-    { id:'photobox_sky_blue_four', name:'Sky Blue Grid', slots:4, layout:'four_grid', bg:'#eff6ff', accent:'#60a5fa', accent2:'#bae6fd', ink:'#1e40af', motif:'cloud', border:'soft', title:'SKY BLUE' },
-    { id:'photobox_noir_contact_four', name:'Noir Contact Sheet', slots:4, layout:'four_stack', bg:'#030712', accent:'#f8fafc', accent2:'#525252', ink:'#ffffff', motif:'film', border:'film', title:'NOIR CONTACT' },
-    { id:'photobox_rose_gold_four', name:'Rose Gold Feature', slots:4, layout:'four_hero_three', bg:'#fff1f2', accent:'#be6f79', accent2:'#f5c2c7', ink:'#7f3340', motif:'pearl', border:'soft', title:'ROSE GOLD' },
-    { id:'photobox_arcade_neon_four', name:'Arcade Neon', slots:4, layout:'four_grid_wide', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', motif:'arcade', border:'square', title:'ARCADE NEON' },
+    { id:'photobox_basic_sky_four', category:'Basic', name:'Basic Sky Grid', slots:4, layout:'four_grid', bg:'#eff6ff', accent:'#60a5fa', accent2:'#dbeafe', ink:'#1e3a8a', motif:'clean', border:'soft', title:'BASIC SKY' },
+    { id:'photobox_noir_contact_four', category:'Film', name:'Noir Contact Sheet', slots:4, layout:'four_stack', bg:'#030712', accent:'#f8fafc', accent2:'#525252', ink:'#ffffff', motif:'film', border:'film', title:'NOIR CONTACT' },
+    { id:'photobox_rose_gold_four', category:'Elegant', name:'Rose Gold Feature', slots:4, layout:'four_hero_three', bg:'#fff1f2', accent:'#be6f79', accent2:'#f5c2c7', ink:'#7f3340', motif:'pearl', border:'soft', title:'ROSE GOLD' },
+    { id:'photobox_arcade_neon_four', category:'Gaming', name:'Arcade Neon', slots:4, layout:'four_grid_wide', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', motif:'arcade', border:'square', title:'ARCADE NEON' },
 
     // 5 slot
-    { id:'photobox_birthday_party_five', name:'Birthday Party Five', slots:5, layout:'five_feature', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', motif:'birthday', border:'pill', title:'BIRTHDAY PARTY' },
-    { id:'photobox_notebook_grid_five', name:'Notebook Grid Five', slots:5, layout:'five_top_hero', bg:'#f8fafc', accent:'#1d4ed8', accent2:'#f87171', ink:'#0f172a', motif:'grid', border:'square', title:'NOTEBOOK GRID' },
-    { id:'photobox_botanical_green_five', name:'Botanical Green Five', slots:5, layout:'five_mosaic', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', motif:'leaf', border:'soft', title:'BOTANICAL GREEN' },
-    { id:'photobox_instagram_feed_five', name:'Instagram Feed Five', slots:5, layout:'five_stripmix', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' },
+    { id:'photobox_birthday_party_five', category:'Seasonal', name:'Birthday Party Five', slots:5, layout:'five_feature', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', motif:'birthday', border:'pill', title:'BIRTHDAY PARTY' },
+    { id:'photobox_basic_white_five', category:'Basic', name:'Basic White Mosaic', slots:5, layout:'five_top_hero', bg:'#ffffff', accent:'#1D3557', accent2:'#e2e8f0', ink:'#1D3557', motif:'clean', border:'square', title:'BASIC WHITE' },
+    { id:'photobox_botanical_green_five', category:'Floral', name:'Botanical Green Five', slots:5, layout:'five_mosaic', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', motif:'leaf', border:'soft', title:'BOTANICAL GREEN' },
+    { id:'photobox_instagram_feed_five', category:'Social Media', name:'Instagram Feed Five', slots:5, layout:'five_stripmix', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' },
 
     // 6 slot
-    { id:'photobox_summer_vacation_six', name:'Summer Vacation Six', slots:6, layout:'six_grid_2x3', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', motif:'summer', border:'pill', title:'SUMMER VACATION' },
-    { id:'photobox_pixel_quest_six', name:'Pixel Quest Six', slots:6, layout:'six_grid_3x2', bg:'#111827', accent:'#22c55e', accent2:'#facc15', ink:'#f8fafc', motif:'pixel', border:'square', title:'PIXEL QUEST' },
-    { id:'photobox_candy_stripe_six', name:'Candy Stripe Six', slots:6, layout:'six_hero_five', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#7c2d12', motif:'stripe', border:'soft', title:'CANDY STRIPE' },
-    { id:'photobox_camera_roll_six', name:'Camera Roll Six', slots:6, layout:'six_story', bg:'#f8fafc', accent:'#111827', accent2:'#94a3b8', ink:'#111827', motif:'cameraRoll', border:'square', title:'CAMERA ROLL' },
+    { id:'photobox_summer_vacation_six', category:'Seasonal', name:'Summer Vacation Six', slots:6, layout:'six_grid_2x3', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', motif:'summer', border:'pill', title:'SUMMER VACATION' },
+    { id:'photobox_pixel_quest_six', category:'Gaming', name:'Pixel Quest Six', slots:6, layout:'six_grid_3x2', bg:'#111827', accent:'#22c55e', accent2:'#facc15', ink:'#f8fafc', motif:'pixel', border:'square', title:'PIXEL QUEST' },
+    { id:'photobox_candy_stripe_six', category:'Pattern', name:'Candy Stripe Six', slots:6, layout:'six_hero_five', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#7c2d12', motif:'stripe', border:'soft', title:'CANDY STRIPE' },
+    { id:'photobox_basic_charcoal_six', category:'Basic', name:'Basic Charcoal Six', slots:6, layout:'six_story', bg:'#27272a', accent:'#f8fafc', accent2:'#71717a', ink:'#ffffff', motif:'clean', border:'square', title:'BASIC CHARCOAL' },
 
     // 7 slot
-    { id:'photobox_valentine_seven', name:'Valentine Seven', slots:7, layout:'seven_3_4', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', motif:'valentine', border:'soft', title:'VALENTINE' },
-    { id:'photobox_royal_navy_seven', name:'Royal Navy Seven', slots:7, layout:'seven_feature', bg:'#0f172a', accent:'#facc15', accent2:'#38bdf8', ink:'#f8fafc', motif:'royal', border:'square', title:'ROYAL NAVY' },
-    { id:'photobox_pastel_arcade_seven', name:'Pastel Arcade Seven', slots:7, layout:'seven_story', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#67e8f9', ink:'#5b21b6', motif:'arcade', border:'soft', title:'PASTEL ARCADE' },
+    { id:'photobox_valentine_seven', category:'Seasonal', name:'Valentine Seven', slots:7, layout:'seven_3_4', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', motif:'valentine', border:'soft', title:'VALENTINE' },
+    { id:'photobox_royal_navy_seven', category:'Elegant', name:'Royal Navy Seven', slots:7, layout:'seven_feature', bg:'#0f172a', accent:'#facc15', accent2:'#38bdf8', ink:'#f8fafc', motif:'royal', border:'square', title:'ROYAL NAVY' },
+    { id:'photobox_pastel_arcade_seven', category:'Gaming', name:'Pastel Arcade Seven', slots:7, layout:'seven_story', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#67e8f9', ink:'#5b21b6', motif:'arcade', border:'soft', title:'PASTEL ARCADE' },
 
     // 8 slot
-    { id:'photobox_christmas_eight', name:'Christmas Eight', slots:8, layout:'eight_2x4', bg:'#f0fdf4', accent:'#dc2626', accent2:'#16a34a', ink:'#14532d', motif:'christmas', border:'soft', title:'CHRISTMAS' },
-    { id:'photobox_checkerboard_eight', name:'Checkerboard Eight', slots:8, layout:'eight_4x2', bg:'#fff7ed', accent:'#111827', accent2:'#fb7185', ink:'#111827', motif:'checker', border:'square', title:'CHECKERBOARD' },
-    { id:'photobox_photo_dump_eight', name:'Photo Dump Eight', slots:8, layout:'eight_mosaic', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' }
+    { id:'photobox_christmas_eight', category:'Seasonal', name:'Christmas Eight', slots:8, layout:'eight_2x4', bg:'#f0fdf4', accent:'#dc2626', accent2:'#16a34a', ink:'#14532d', motif:'christmas', border:'soft', title:'CHRISTMAS' },
+    { id:'photobox_checkerboard_eight', category:'Pattern', name:'Checkerboard Eight', slots:8, layout:'eight_4x2', bg:'#fff7ed', accent:'#111827', accent2:'#fb7185', ink:'#111827', motif:'checker', border:'square', title:'CHECKERBOARD' },
+    { id:'photobox_photo_dump_eight', category:'Social Media', name:'Photo Dump Eight', slots:8, layout:'eight_mosaic', bg:'#fff7fb', accent:'#d946ef', accent2:'#fb7185', ink:'#581c87', motif:'igfeed', border:'soft', title:'PHOTO DUMP' }
   ];
 
   const BUILTIN_FRAME_DEFS = [
@@ -2059,7 +2060,8 @@
       return {
         id: `__photobox_${def.id}__`,
         name: def.name,
-        category: PHOTOBOX_CATEGORY,
+        category: def.category,
+        productCategory: PHOTOBOX_CATEGORY,
         isBuiltIn: true,
         isPhotobox: true,
         src: data.src,
@@ -2128,7 +2130,7 @@
 
   // ─── Local built-in template state ───
   let selectedTemplate = null;
-  let currentCat = isPhotoboxMode ? '4' : '__basic__';
+  let currentCat = isPhotoboxMode ? 'Basic' : '__basic__';
 
   function mapFrameDef(def) {
     const data = generateBuiltInFrameSrc(def);
@@ -2149,7 +2151,8 @@
     return {
       id: `__photobox_${def.id}__`,
       name: def.name,
-      category: PHOTOBOX_CATEGORY,
+      category: def.category,
+      productCategory: PHOTOBOX_CATEGORY,
       layout: def.layout,
       slotCount: def.slots,
       isBuiltIn: true,
@@ -2164,7 +2167,7 @@
   function getTemplatesForCurrentCategory() {
     builtInCache.clear();
     if (isPhotoboxMode) {
-      return PHOTOBOX_DEFS.filter(def => String(def.slots) === currentCat).map(mapPhotoboxDef);
+      return PHOTOBOX_DEFS.filter(def => def.category === currentCat).map(mapPhotoboxDef);
     }
     if (currentCat === '__basic__') return getAllBasicTemplates();
     return BUILTIN_FRAME_DEFS.filter(def => def.category === currentCat).map(mapFrameDef);
@@ -2172,11 +2175,7 @@
 
   function getCategoryTabs() {
     if (isPhotoboxMode) {
-      return Array.from({ length: 8 }, (_, index) => {
-        const value = String(index + 1);
-        const count = PHOTOBOX_DEFS.filter(def => String(def.slots) === value).length;
-        return { label: `${value} Foto (${count})`, value };
-      });
+      return PHOTOBOX_CATEGORIES.map(category => ({ label: category, value: category }));
     }
     return [
       { label: 'Basic', value: '__basic__' },
@@ -2289,7 +2288,7 @@
   if (isPhotoboxMode) {
     document.title = 'Pilih Template Photobox 4R - LUX Photobooth';
     document.querySelector('h2').textContent = 'Pilih Template Photobox 4R';
-    document.querySelector('.sub').textContent = `${PHOTOBOX_DEFS.length} template built-in Photobox 4R tersedia`;
+    document.querySelector('.sub').textContent = `${PHOTOBOX_DEFS.length} template photobox built-in tersedia tanpa login`;
     document.getElementById('btnLanjut').textContent = 'Mulai Photobox →';
   } else {
     document.querySelector('.sub').textContent = `${FRAME_COLORS.length + BUILTIN_FRAME_DEFS.length} template photostrip built-in tersedia tanpa login`;
