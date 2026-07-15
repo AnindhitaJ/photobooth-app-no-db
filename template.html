@@ -494,12 +494,12 @@
     let slotCount = FRAME_SLOTS;
 
     if (category === 'Social Media') {
-      sidePad = 128;
-      topPad = 222;
-      // Social template sebelumnya menyisakan area kosong terlalu besar di bawah slot terakhir.
-      // Dibuat lebih rapat supaya slot foto turun dan preview tidak terasa kosong.
-      bottomPad = 270;
-      gap = 74;
+      // Social templates use a compact native-app layout: wider photos,
+      // tighter spacing, and a dedicated footer instead of a large name zone.
+      sidePad = 76;
+      topPad = 156;
+      bottomPad = 168;
+      gap = 32;
       slotCount = 3;
     } else if (category === 'Korean') {
       sidePad = 78;
@@ -1224,114 +1224,133 @@
   }
 
   function drawSocialDecor(ctx, def) {
-    function tinyMetric(x, y, w, label, fill, color, align = 'center') {
-      roundRect(ctx, x, y, w, 22, 11, fill, null, 0);
-      const tx = align === 'left' ? x + 10 : align === 'right' ? x + w - 10 : x + w / 2;
-      text(ctx, label, tx, y + 12, 13, color, 800, align);
+    const SOCIAL_ID = 'luxphotobooth.id';
+
+    function metricPill(x, y, w, label, fill, color, align = 'center') {
+      roundRect(ctx, x, y, w, 36, 18, fill, null, 0);
+      const tx = align === 'left' ? x + 14 : align === 'right' ? x + w - 14 : x + w / 2;
+      text(ctx, label, tx, y + 19, 17, color, 800, align);
     }
-    function actionBubble(x, y, icon, count, fill, color) {
-      circle(ctx, x, y, 17, fill, null, 0);
-      text(ctx, icon, x, y, 14, color, 900);
-      text(ctx, count, x, y + 24, 9, color, 800);
+
+    function headerCard(fill = withAlpha('#ffffff', .96), stroke = withAlpha(def.accent2, .24), h = 84) {
+      roundRect(ctx, 24, 18, FRAME_W - 48, h, 26, fill, stroke, 1.6);
     }
+
+    function avatar(x, y, fill, stroke, glyph, glyphColor) {
+      circle(ctx, x, y, 24, fill, stroke);
+      text(ctx, glyph, x, y + 1, 21, glyphColor, 900);
+    }
+
     if (def.motif === 'igfeed') {
-      roundRect(ctx, 24, 20, FRAME_W - 48, 68, 26, withAlpha('#ffffff', .96), withAlpha(def.accent2, .24), 1.5);
-      circle(ctx, 62, 54, 18, withAlpha(def.accent, .14), withAlpha(def.accent, .5), 1.2);
-      text(ctx, '◎', 62, 54, 17, def.accent, 900);
-      text(ctx, 'luxphotobootd.id', 96, 50, 21, def.ink, 900, 'left');
-      text(ctx, 'official photo studio', 96, 68, 13.5, withAlpha(def.ink, .58), 700, 'left');
-      text(ctx, '⋯', FRAME_W - 40, 54, 18, def.ink, 900);
-      text(ctx, 'liked by @luxfriends and 8.1k others', 40, FRAME_H - 104, 15, withAlpha(def.ink, .7), 700, 'left');
-      tinyMetric(34, FRAME_H - 82, 92, '12.8k likes', withAlpha(def.accent, .12), def.ink);
-      tinyMetric(134, FRAME_H - 82, 92, '326 replies', withAlpha(def.accent2, .22), def.ink);
-      tinyMetric(234, FRAME_H - 82, 82, '59 saves', withAlpha(def.accent, .1), def.ink);
+      headerCard();
+      avatar(62, 60, withAlpha(def.accent, .12), withAlpha(def.accent, .55), '◎', def.accent);
+      text(ctx, SOCIAL_ID, 102, 52, 25, def.ink, 900, 'left');
+      text(ctx, 'official photo studio', 102, 77, 17, withAlpha(def.ink, .62), 700, 'left');
+      text(ctx, '•••', FRAME_W - 44, 59, 19, def.ink, 900);
+
+      text(ctx, 'caught being iconic online', 38, 1630, 21, def.ink, 900, 'left');
+      text(ctx, 'liked by @luxfriends and 8.1k others', 38, 1660, 18, withAlpha(def.ink, .72), 700, 'left');
+      metricPill(34, 1683, 150, '12.8k likes', withAlpha(def.accent, .12), def.ink);
+      metricPill(194, 1683, 142, '326 replies', withAlpha(def.accent2, .22), def.ink);
+      metricPill(346, 1683, 120, '59 saves', withAlpha(def.accent, .1), def.ink);
     } else if (def.motif === 'igstory') {
-      roundRect(ctx, 24, 20, FRAME_W - 48, 76, 30, withAlpha('#000000', .48), withAlpha('#ffffff', .16), 1.2);
+      headerCard(withAlpha('#000000', .52), withAlpha('#ffffff', .18), 92);
       const colors = ['#f9ce34','#ee2a7b','#6228d7','#f9ce34'];
-      for (let i = 0; i < 4; i++) roundRect(ctx, 40 + i * 130, 30, 112, 5, 3, withAlpha(colors[i], .92));
-      circle(ctx, 62, 62, 18, withAlpha('#ffffff', .08), withAlpha('#ffffff', .72), 1.2);
-      text(ctx, '○', 62, 62, 18, '#ffffff', 900);
-      text(ctx, 'luxphotobootd.id', 94, 60, 20, '#ffffff', 900, 'left');
-      text(ctx, '2m ago', 94, 76, 13.5, withAlpha('#ffffff', .68), 700, 'left');
-      text(ctx, '✕', FRAME_W - 40, 62, 15, '#ffffff', 900);
-      text(ctx, '1.4k hearts • 88 replies • 21 shares', FRAME_W - 44, FRAME_H - 48, 15, '#ffffff', 900, 'right');
+      for (let i = 0; i < 4; i++) roundRect(ctx, 38 + i * 130, 28, 118, 7, 4, withAlpha(colors[i], .95));
+      avatar(64, 68, withAlpha('#ffffff', .08), withAlpha('#ffffff', .72), '○', '#ffffff');
+      text(ctx, SOCIAL_ID, 104, 60, 25, '#ffffff', 900, 'left');
+      text(ctx, '2m ago', 104, 84, 17, withAlpha('#ffffff', .72), 700, 'left');
+      text(ctx, '✕', FRAME_W - 42, 68, 19, '#ffffff', 900);
+      roundRect(ctx, 36, 1640, FRAME_W - 72, 56, 28, withAlpha('#000000', .35), withAlpha('#ffffff', .34), 1.4);
+      text(ctx, 'Send message', 64, 1668, 19, '#ffffff', 700, 'left');
+      text(ctx, '♡   1.4k     ↗   88', FRAME_W - 54, 1668, 19, '#ffffff', 900, 'right');
     } else if (def.motif === 'tiktok') {
-      text(ctx, 'Following', 178, 54, 18, withAlpha('#ffffff', .72), 700);
-      text(ctx, 'For You', 292, 55, 22, '#ffffff', 900);
-      line(ctx, 258, 66, 326, 66, withAlpha('#ffffff', .88), 2);
-      circle(ctx, 62, FRAME_H - 78, 18, withAlpha('#ffffff', .18), withAlpha('#ffffff', .55), 1);
-      text(ctx, '♪', 62, FRAME_H - 78, 16, '#ffffff', 900);
-      text(ctx, 'luxphotobootd.id', 94, FRAME_H - 94, 18, '#ffffff', 900, 'left');
-      text(ctx, 'pretty privilege detected ✨', 94, FRAME_H - 72, 14.5, withAlpha('#ffffff', .82), 700, 'left');
-      actionBubble(FRAME_W - 42, 640, '♥', '24.6k', withAlpha(def.accent, .22), '#ffffff');
-      actionBubble(FRAME_W - 42, 748, '💬', '1,203', withAlpha(def.accent2, .24), '#ffffff');
-      actionBubble(FRAME_W - 42, 856, '↗', '314', withAlpha('#ffffff', .12), '#ffffff');
-      actionBubble(FRAME_W - 42, 964, '🔖', '911', withAlpha('#ffffff', .12), '#ffffff');
+      text(ctx, 'Following', 180, 56, 21, withAlpha('#ffffff', .7), 700);
+      text(ctx, 'For You', 306, 56, 27, '#ffffff', 900);
+      line(ctx, 272, 74, 340, 74, withAlpha('#ffffff', .9), 3);
+      text(ctx, SOCIAL_ID, 42, 1633, 24, '#ffffff', 900, 'left');
+      text(ctx, 'pretty privilege detected ✨', 42, 1665, 19, withAlpha('#ffffff', .88), 700, 'left');
+      roundRect(ctx, 42, 1689, 345, 40, 20, withAlpha('#000000', .28), withAlpha('#ffffff', .16), 1);
+      text(ctx, '♪ original sound — ' + SOCIAL_ID, 60, 1710, 17, '#ffffff', 700, 'left');
+      const actions = [
+        [FRAME_W - 43, 586, '♥', '24.6k', def.accent],
+        [FRAME_W - 43, 716, '💬', '1,203', def.accent2],
+        [FRAME_W - 43, 846, '↗', '314', '#ffffff'],
+        [FRAME_W - 43, 976, '🔖', '911', '#ffffff']
+      ];
+      actions.forEach(([x,y,icon,count,color]) => {
+        circle(ctx, x, y, 23, withAlpha(color, .22), withAlpha('#ffffff', .14));
+        text(ctx, icon, x, y, 19, '#ffffff', 900);
+        text(ctx, count, x, y + 36, 15, '#ffffff', 800);
+      });
     } else if (def.motif === 'youtube') {
-      roundRect(ctx, 22, 20, FRAME_W - 44, 64, 22, withAlpha('#ffffff', .96), withAlpha(def.accent2, .18), 1.2);
-      roundRect(ctx, 42, 37, 54, 30, 15, def.accent);
-      text(ctx, '▶', 69, 52, 16, '#ffffff', 900);
-      text(ctx, 'luxphotobootd.id', 136, 54, 21, def.ink, 900, 'left');
-      roundRect(ctx, FRAME_W - 144, 35, 96, 32, 16, def.accent);
-      text(ctx, 'SUBSCRIBE', FRAME_W - 96, 51, 11, '#ffffff', 900);
-      text(ctx, '1.2M views • 2 days ago', 42, FRAME_H - 102, 14.5, withAlpha(def.ink, .72), 700, 'left');
-      tinyMetric(34, FRAME_H - 84, 84, '18k likes', withAlpha(def.accent, .1), def.ink);
-      tinyMetric(126, FRAME_H - 84, 84, '524 chats', withAlpha(def.accent2, .18), def.ink);
-      tinyMetric(218, FRAME_H - 84, 84, 'shared 59', withAlpha(def.accent, .08), def.ink);
+      headerCard();
+      roundRect(ctx, 42, 40, 64, 38, 19, def.accent);
+      text(ctx, '▶', 74, 59, 19, '#ffffff', 900);
+      text(ctx, 'LUX PHOTOBOOTH', 126, 58, 24, def.ink, 900, 'left');
+      roundRect(ctx, FRAME_W - 158, 39, 112, 40, 20, def.accent);
+      text(ctx, 'SUBSCRIBE', FRAME_W - 102, 59, 13, '#ffffff', 900);
+      text(ctx, 'new photo dump vlog • 1.2M views', 38, 1640, 20, def.ink, 900, 'left');
+      text(ctx, 'posted 2 days ago', 38, 1670, 17, withAlpha(def.ink, .68), 700, 'left');
+      metricPill(34, 1693, 138, '18k likes', withAlpha(def.accent, .1), def.ink);
+      metricPill(182, 1693, 138, '524 chats', withAlpha(def.accent2, .18), def.ink);
+      metricPill(330, 1693, 138, '59 shares', withAlpha(def.accent, .08), def.ink);
     } else if (def.motif === 'iphone') {
-      text(ctx, '9:41', 58, 50, 18, def.ink, 900, 'left');
-      text(ctx, 'luxphotobootd.id', FRAME_W / 2, 54, 23, def.ink, 900);
-      text(ctx, 'Select', FRAME_W - 48, 50, 15, def.accent, 900, 'right');
-      line(ctx, 26, 82, FRAME_W - 26, 82, withAlpha(def.accent2, .42), 1);
-      text(ctx, 'June 2026', 48, 110, 16.5, withAlpha(def.ink, .66), 700, 'left');
-      line(ctx, 34, FRAME_H - 94, FRAME_W - 34, FRAME_H - 94, withAlpha(def.accent2, .38), 1);
-      tinyMetric(48, FRAME_H - 72, 92, 'favorite', withAlpha(def.accent, .08), def.accent);
-      tinyMetric(154, FRAME_H - 72, 92, 'share', withAlpha(def.accent, .08), def.accent);
-      tinyMetric(260, FRAME_H - 72, 92, 'delete', withAlpha(def.accent, .08), def.accent);
-      tinyMetric(366, FRAME_H - 72, 92, 'more', withAlpha(def.accent, .08), def.accent);
+      text(ctx, '9:41', 48, 52, 21, def.ink, 900, 'left');
+      text(ctx, 'LUX Photos', FRAME_W / 2, 54, 26, def.ink, 900);
+      text(ctx, 'Select', FRAME_W - 46, 52, 19, def.accent, 900, 'right');
+      line(ctx, 26, 92, FRAME_W - 26, 92, withAlpha(def.accent2, .42), 1.5);
+      text(ctx, 'June 2026', 44, 122, 20, withAlpha(def.ink, .68), 700, 'left');
+      line(ctx, 34, 1634, FRAME_W - 34, 1634, withAlpha(def.accent2, .38), 1.5);
+      const labels = ['♡ favorite', '↗ share', '▣ album', '••• more'];
+      labels.forEach((label, i) => metricPill(34 + i * 132, 1660, 122, label, withAlpha(def.accent, .08), def.accent));
     } else if (def.motif === 'cameraRoll') {
-      roundRect(ctx, 24, 20, FRAME_W - 48, 66, 22, withAlpha('#ffffff', .06), withAlpha('#ffffff', .18), 1.2);
-      text(ctx, '9:41', 54, 50, 18, '#ffffff', 900, 'left');
-      text(ctx, 'luxphotobootd.id', FRAME_W / 2, 54, 23, '#ffffff', 900);
-      text(ctx, 'Select', FRAME_W - 46, 50, 15, withAlpha('#ffffff', .84), 900, 'right');
-      text(ctx, '247 items', 46, 106, 12, withAlpha('#ffffff', .66), 700, 'left');
-      roundRect(ctx, 54, FRAME_H - 92, FRAME_W - 108, 40, 20, withAlpha('#ffffff', .08), withAlpha('#ffffff', .16), 1);
-      text(ctx, 'fav   share   keep   more', FRAME_W / 2, FRAME_H - 67, 16, '#ffffff', 900);
+      headerCard(withAlpha('#ffffff', .07), withAlpha('#ffffff', .2), 78);
+      text(ctx, '9:41', 48, 56, 21, '#ffffff', 900, 'left');
+      text(ctx, 'LUX Recents', FRAME_W / 2, 56, 26, '#ffffff', 900);
+      text(ctx, 'Select', FRAME_W - 46, 56, 19, withAlpha('#ffffff', .88), 900, 'right');
+      text(ctx, '247 items', 42, 118, 18, withAlpha('#ffffff', .68), 700, 'left');
+      roundRect(ctx, 42, 1652, FRAME_W - 84, 64, 32, withAlpha('#ffffff', .09), withAlpha('#ffffff', .18), 1.2);
+      text(ctx, '♡ Favorite     ↗ Share     ▣ Album     ••• More', FRAME_W / 2, 1684, 18, '#ffffff', 900);
     } else if (def.motif === 'music') {
-      roundRect(ctx, 146, 28, FRAME_W - 292, 42, 20, withAlpha(def.accent, .16), withAlpha(def.accent, .36), 1.4);
-      text(ctx, 'luxphotobootd.id', FRAME_W / 2, 56, 21, def.ink, 900);
-      roundRect(ctx, 72, FRAME_H - 110, FRAME_W - 144, 28, 14, withAlpha(def.ink, .14));
-      roundRect(ctx, 72, FRAME_H - 110, 240, 28, 14, def.accent);
-      text(ctx, '▶ 00:42 / 02:31', 54, FRAME_H - 130, 14, def.ink, 900, 'left');
-      text(ctx, '12.2k listeners', FRAME_W - 56, FRAME_H - 130, 13, def.accent2, 900, 'right');
-      text(ctx, 'prev   play   next', FRAME_W / 2, FRAME_H - 50, 18, def.ink, 900);
+      roundRect(ctx, 126, 26, FRAME_W - 252, 54, 27, withAlpha(def.accent, .16), withAlpha(def.accent, .36), 1.5);
+      text(ctx, 'LUX NOW PLAYING', FRAME_W / 2, 53, 22, def.ink, 900);
+      text(ctx, 'Main character soundtrack', 42, 1635, 21, def.ink, 900, 'left');
+      text(ctx, '12.2k listeners', FRAME_W - 42, 1635, 17, def.accent2, 900, 'right');
+      roundRect(ctx, 42, 1662, FRAME_W - 84, 16, 8, withAlpha(def.ink, .14));
+      roundRect(ctx, 42, 1662, 286, 16, 8, def.accent);
+      text(ctx, '00:42', 42, 1697, 17, def.ink, 900, 'left');
+      text(ctx, '◀      ▶      ▶|', FRAME_W / 2, 1700, 24, def.ink, 900);
+      text(ctx, '02:31', FRAME_W - 42, 1697, 17, def.ink, 900, 'right');
     } else if (def.motif === 'chat') {
-      roundRect(ctx, 34, 26, 218, 34, 17, withAlpha(def.accent, .24));
-      text(ctx, 'luxphotobootd.id', 143, 50, 16, def.ink, 900);
-      roundRect(ctx, 42, 112, 164, 38, 18, withAlpha(def.accent, .24));
-      text(ctx, 'posting this bc i look expensive', 124, 136, 11, def.ink, 700);
-      roundRect(ctx, FRAME_W - 244, FRAME_H - 166, 202, 38, 18, withAlpha(def.accent2, .88));
-      text(ctx, 'send me the pics pls 😭', FRAME_W - 143, FRAME_H - 142, 11, def.ink, 700);
-      text(ctx, 'online', FRAME_W - 52, FRAME_H - 50, 13, withAlpha(def.ink, .62), 900, 'right');
+      headerCard(withAlpha('#ffffff', .82), withAlpha(def.accent, .22), 78);
+      avatar(60, 57, withAlpha(def.accent, .2), withAlpha(def.accent, .36), 'L', def.ink);
+      text(ctx, 'LUX Photobooth', 98, 50, 23, def.ink, 900, 'left');
+      text(ctx, 'online now', 98, 73, 16, withAlpha(def.ink, .62), 700, 'left');
+      roundRect(ctx, 38, 108, 302, 46, 23, withAlpha(def.accent, .2));
+      text(ctx, 'posting this because I look expensive', 58, 132, 15, def.ink, 700, 'left');
+      roundRect(ctx, FRAME_W - 368, 1635, 330, 50, 25, withAlpha(def.accent2, .86));
+      text(ctx, 'send me the photos please 😭', FRAME_W - 58, 1661, 16, def.ink, 700, 'right');
+      text(ctx, 'Seen 16:42', FRAME_W - 44, 1707, 15, withAlpha(def.ink, .62), 800, 'right');
     } else if (def.motif === 'profile') {
-      roundRect(ctx, 24, 20, FRAME_W - 48, 88, 26, withAlpha('#ffffff', .92), withAlpha(def.accent2, .24), 1.2);
-      circle(ctx, 72, 64, 24, withAlpha(def.accent, .14), withAlpha(def.accent, .52), 1.2);
-      text(ctx, '☺', 72, 65, 18, def.accent, 900);
-      text(ctx, 'luxphotobootd.id', 120, 58, 20, def.ink, 900, 'left');
-      text(ctx, 'your photo moment archive', 120, 76, 13.5, withAlpha(def.ink, .62), 700, 'left');
-      tinyMetric(280, 42, 84, '321 posts', withAlpha(def.accent, .1), def.ink);
-      tinyMetric(280, 68, 112, '14.2k followers', withAlpha(def.accent2, .18), def.ink);
-      text(ctx, 'highlights • fitcheck • dumps', 46, FRAME_H - 54, 14, withAlpha(def.ink, .76), 700, 'left');
+      headerCard(withAlpha('#ffffff', .94), withAlpha(def.accent2, .24), 100);
+      avatar(68, 68, withAlpha(def.accent, .14), withAlpha(def.accent, .52), '☺', def.accent);
+      text(ctx, SOCIAL_ID, 108, 54, 22, def.ink, 900, 'left');
+      text(ctx, 'your photo moment archive', 108, 80, 16, withAlpha(def.ink, .62), 700, 'left');
+      metricPill(376, 32, 166, '321 posts', withAlpha(def.accent, .1), def.ink);
+      metricPill(376, 72, 166, '14.2k followers', withAlpha(def.accent2, .18), def.ink);
+      text(ctx, 'highlights', 40, 1636, 19, def.ink, 900, 'left');
+      ['fit check', 'photo dump', 'besties'].forEach((label, i) => metricPill(38 + i * 172, 1662, 160, label, withAlpha(def.accent, .1), def.ink));
     } else {
-      roundRect(ctx, 24, 20, FRAME_W - 48, 64, 22, withAlpha('#ffffff', .9), withAlpha(def.accent2, .2), 1.2);
-      text(ctx, 'luxphotobootd.id', FRAME_W / 2, 54, 22, def.ink, 900);
-      text(ctx, 'saved by 8.2k people', 44, FRAME_H - 108, 15, withAlpha(def.ink, .72), 700, 'left');
-      tinyMetric(42, FRAME_H - 86, 86, '48.9k likes', withAlpha(def.accent, .14), def.ink);
-      tinyMetric(136, FRAME_H - 86, 86, '2,141 talks', withAlpha(def.accent2, .18), def.ink);
-      tinyMetric(230, FRAME_H - 86, 72, '631 saves', withAlpha(def.accent, .1), def.ink);
+      headerCard();
+      text(ctx, SOCIAL_ID, FRAME_W / 2, 59, 25, def.ink, 900);
+      text(ctx, 'this post is doing numbers', 40, 1636, 21, def.ink, 900, 'left');
+      text(ctx, 'saved by 8.2k people', 40, 1666, 18, withAlpha(def.ink, .7), 700, 'left');
+      metricPill(34, 1690, 142, '48.9k likes', withAlpha(def.accent, .14), def.ink);
+      metricPill(186, 1690, 142, '2,141 talks', withAlpha(def.accent2, .18), def.ink);
+      metricPill(338, 1690, 128, '631 saves', withAlpha(def.accent, .1), def.ink);
     }
   }
-
 
 
   function drawHeaderRibbon(ctx, x, y, w, h, label, fill, stroke, color) {
@@ -1468,7 +1487,7 @@
       // Keep this branch empty to avoid duplicate/stacked headers and ornaments.
     }
 
-    drawNameZone(ctx, def, slots);
+    if (def.category !== 'Social Media') drawNameZone(ctx, def, slots);
   }
 
   function drawSlotBorders(ctx, slots, def) {
@@ -1694,40 +1713,46 @@
         }
       } else if (def.category === 'Social Media') {
         const socialCounts = [
-          ['1.8k likes', '86 chats', '24 saves'],
-          ['4.9k likes', '302 chats', '87 saves'],
-          ['8.1k likes', '540 chats', '121 saves']
+          ['1.8k', '86', '24'],
+          ['4.9k', '302', '87'],
+          ['8.1k', '540', '121']
         ];
+        const topOverlay = (label, color = def.ink) => {
+          roundRect(ctx, s.x + 12, s.y + 12, s.w - 24, 38, 19, withAlpha('#ffffff', .9), withAlpha(def.accent2, .22), 1);
+          circle(ctx, s.x + 32, s.y + 31, 8, def.accent);
+          text(ctx, label, s.x + 50, s.y + 31, 16, color, 800, 'left');
+        };
+        const bottomOverlay = (label, color = def.ink, fill = withAlpha('#ffffff', .88)) => {
+          roundRect(ctx, s.x + 12, s.y + s.h - 48, s.w - 24, 36, 18, fill, null, 0);
+          text(ctx, label, s.x + 26, s.y + s.h - 29, 16, color, 800, 'left');
+        };
+
         if (def.motif === 'igstory') {
-          roundRect(ctx, s.x - 8, s.y - 8, s.w + 16, s.h + 16, 24, null, withAlpha('#ffffff', .82), 1.8);
-          roundRect(ctx, s.x + 12, s.y + 12, 72, 8, 4, withAlpha('#ffffff', .78));
-          text(ctx, socialCounts[idx][0], s.x + s.w - 16, s.y + s.h - 16, 12.5, '#ffffff', 800, 'right');
+          roundRect(ctx, s.x - 8, s.y - 8, s.w + 16, s.h + 16, 24, null, withAlpha('#ffffff', .82), 2);
+          roundRect(ctx, s.x + 14, s.y + 14, s.w - 28, 8, 4, withAlpha('#ffffff', .8));
+          bottomOverlay('♡ ' + socialCounts[idx][0] + '   💬 ' + socialCounts[idx][1], '#ffffff', withAlpha('#000000', .34));
         } else if (def.motif === 'igfeed' || def.motif === 'profile') {
-          roundRect(ctx, s.x - 8, s.y - 34, s.w + 16, 26, 13, withAlpha('#ffffff', .9), withAlpha(def.accent2, .24), 1);
-          circle(ctx, s.x + 16, s.y - 21, 7, def.accent);
-          line(ctx, s.x + 30, s.y - 21, s.x + 110, s.y - 21, withAlpha(def.ink, .28), 3.2);
-          text(ctx, socialCounts[idx][0], s.x + 12, s.y + s.h + 26, 11.8, withAlpha(def.ink, .76), 800, 'left');
-          text(ctx, socialCounts[idx][1], s.x + s.w - 12, s.y + s.h + 26, 11.8, withAlpha(def.ink, .76), 800, 'right');
+          topOverlay(idx === 0 ? 'luxphotobooth.id' : 'photo ' + (idx + 1));
+          bottomOverlay('♥ ' + socialCounts[idx][0] + '   💬 ' + socialCounts[idx][1] + '   🔖 ' + socialCounts[idx][2]);
         } else if (def.motif === 'youtube') {
-          roundRect(ctx, s.x + 12, s.y + s.h - 30, 66, 20, 10, def.accent);
-          text(ctx, 'PLAY', s.x + 45, s.y + s.h - 16, 12, '#fff', 900);
-          text(ctx, ['10k views','18k views','31k views'][idx], s.x + s.w - 12, s.y + s.h + 24, 11.6, withAlpha(def.ink, .76), 800, 'right');
+          roundRect(ctx, s.x + 14, s.y + s.h - 52, 82, 36, 18, def.accent);
+          text(ctx, '▶ PLAY', s.x + 55, s.y + s.h - 33, 15, '#fff', 900);
+          text(ctx, ['10k views','18k views','31k views'][idx], s.x + s.w - 18, s.y + s.h - 33, 16, '#ffffff', 800, 'right');
         } else if (def.motif === 'music') {
-          roundRect(ctx, s.x + 12, s.y + s.h - 26, s.w - 24, 9, 5, withAlpha(def.ink, .14));
-          roundRect(ctx, s.x + 12, s.y + s.h - 26, (s.w - 24) * ([.28, .52, .76][idx]), 9, 5, def.accent);
-          text(ctx, ['0:18','0:58','1:42'][idx], s.x + s.w - 12, s.y + 20, 11.6, withAlpha(def.ink, .74), 800, 'right');
+          roundRect(ctx, s.x + 16, s.y + s.h - 40, s.w - 32, 12, 6, withAlpha(def.ink, .18));
+          roundRect(ctx, s.x + 16, s.y + s.h - 40, (s.w - 32) * ([.28, .52, .76][idx]), 12, 6, def.accent);
+          text(ctx, ['0:18','0:58','1:42'][idx], s.x + s.w - 18, s.y + 28, 16, withAlpha(def.ink, .78), 800, 'right');
         } else if (def.motif === 'chat') {
-          roundRect(ctx, s.x + s.w - 94, s.y + 10, 78, 20, 10, withAlpha(def.accent, .22), withAlpha(def.accent, .32), 1);
-          text(ctx, idx % 2 ? 'typing...' : 'seen', s.x + s.w - 55, s.y + 24, 10.8, def.ink, 700);
+          roundRect(ctx, s.x + s.w - 118, s.y + 14, 100, 32, 16, withAlpha(def.accent, .22), withAlpha(def.accent, .32), 1);
+          text(ctx, idx % 2 ? 'typing…' : 'seen', s.x + s.w - 68, s.y + 31, 15, def.ink, 700);
         } else if (def.motif === 'tiktok') {
-          text(ctx, '♪', s.x + 16, s.y + 20, 18, def.accent);
-          text(ctx, socialCounts[idx][0], s.x + s.w - 12, s.y + s.h - 16, 12.2, '#ffffff', 800, 'right');
+          text(ctx, '♪', s.x + 24, s.y + 28, 23, def.accent);
+          bottomOverlay('♥ ' + socialCounts[idx][0] + '   💬 ' + socialCounts[idx][1], '#ffffff', withAlpha('#000000', .32));
         } else if (def.motif === 'iphone' || def.motif === 'cameraRoll') {
-          text(ctx, ['LIVE','HDR','RAW'][idx], s.x + s.w - 14, s.y + 20, 11.8, def.ink, 800, 'right');
-          text(ctx, ['1 Jun','6 Jun','10 Jun'][idx], s.x + 12, s.y + s.h + 24, 11.6, withAlpha(def.ink, .72), 800, 'left');
+          text(ctx, ['LIVE','HDR','RAW'][idx], s.x + s.w - 18, s.y + 28, 16, def.ink, 800, 'right');
+          bottomOverlay(['1 June','6 June','10 June'][idx], def.ink);
         } else {
-          text(ctx, socialCounts[idx][0], s.x + 12, s.y + s.h + 24, 11.6, withAlpha(def.ink, .76), 800, 'left');
-          text(ctx, socialCounts[idx][1], s.x + s.w - 12, s.y + s.h + 24, 11.6, withAlpha(def.ink, .76), 800, 'right');
+          bottomOverlay('♥ ' + socialCounts[idx][0] + '   💬 ' + socialCounts[idx][1] + '   🔖 ' + socialCounts[idx][2]);
         }
       } else {
         corners.forEach(([cx, cy], cidx) => {
@@ -1751,14 +1776,7 @@
             : ['P1','P2','P3'][idx];
           text(ctx, gamingGap, FRAME_W / 2, gapY + 1, 12, def.ink, 900);
         } else if (def.category === 'Social Media') {
-          const socialGap = def.motif === 'youtube' ? ['posted 2d ago','watch next ✨'][idx]
-            : def.motif === 'tiktok' ? ['on your fyp','saved to favorites'][idx]
-            : def.motif === 'music' ? ['now playing','repeat-worthy'][idx]
-            : def.motif === 'iphone' || def.motif === 'cameraRoll' ? ['camera roll','best angle only'][idx]
-            : def.motif === 'chat' ? ['group chat chaos','bestie approved'][idx]
-            : ['soft launch energy','too pretty to scroll past'][idx];
-          roundRect(ctx, FRAME_W / 2 - 98, gapY - 14, 196, 28, 12, withAlpha(def.accent, .1), withAlpha(def.accent2, .28), 1.2);
-          text(ctx, socialGap, FRAME_W / 2, gapY + 1, 14, def.ink, 800);
+          // Keep compact gaps clean; metadata is rendered inside each photo card.
         } else {
           text(ctx, ['✦','♡','★','✿'][idx % 4], FRAME_W / 2, gapY + 1, 20, withAlpha(def.accent2, .92));
           line(ctx, 110, gapY, FRAME_W / 2 - 26, gapY, withAlpha(def.accent, .24), 1.5);
