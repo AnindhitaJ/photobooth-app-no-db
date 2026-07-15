@@ -55,6 +55,23 @@ if "let currentCat = isPhotoboxMode ? 'Basic'" not in text:
     errors.append('photobox default category is not Basic')
 if "return PHOTOBOX_CATEGORIES.map(category => ({ label: category, value: category }))" not in text:
     errors.append('photobox category tabs do not mirror photostrip themes')
+if "function drawPhotostripBranding" not in text:
+    errors.append('photostrip branding renderer is missing')
+if "drawPhotostripBranding(ctx, { text: colorObj.text" not in text:
+    errors.append('basic photostrip templates are missing LUX branding')
+if "drawPhotostripBranding(ctx, def, slots);" not in text:
+    errors.append('decorative photostrip templates are missing LUX branding')
+for brand_label in ['LUX PHOTOBOOTH', 'lux photobooth']:
+    if brand_label not in text:
+        errors.append(f'missing photostrip brand label: {brand_label}')
+
+social_match = re.search(r"function drawSocialDecor\(ctx, def\) \{(.*?)\n  \}\n\n\n\n  function drawHeaderRibbon", text, re.S)
+social_block = social_match.group(1) if social_match else ''
+if social_block.count('luxphotobootd.id') < 10:
+    errors.append(f'social media templates do not consistently use luxphotobootd.id: {social_block.count("luxphotobootd.id")} occurrences')
+for old_social_brand in ['lux.photobooth', '@luxphotobooth', 'LUX Photos', 'LUX Recents', 'LUX Now Playing', 'LUX Photobooth', 'LUX viral post']:
+    if old_social_brand in social_block:
+        errors.append(f'old social identity remains: {old_social_brand}')
 
 index_text = (ROOT / 'index.html').read_text(encoding='utf-8')
 sw_text = (ROOT / 'sw.js').read_text(encoding='utf-8')
@@ -71,6 +88,13 @@ if 'accept="image/*"' not in merge_text:
 for removed in ['login.html', 'admin.html', 'cms.html', 'gallery.html', 'api', 'supabase']:
     if (ROOT / removed).exists():
         errors.append(f'backend/removed artifact still present: {removed}')
+
+# Ganci local-only export must never depend on the removed Auth module.
+ganci_print = (ROOT / 'ganci-print.js').read_text(encoding='utf-8')
+if 'Auth.exportCanvasDataURL' in ganci_print:
+    errors.append('ganci-print.js still depends on removed Auth helper')
+if ".toDataURL('image/jpeg', 0.98)" not in ganci_print:
+    errors.append('ganci print JPEG canvas export is missing')
 
 if errors:
     print('VALIDATION FAILED')
