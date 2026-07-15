@@ -18,7 +18,7 @@ Versi ini mempertahankan visual dan alur kamera utama dari project awal, tetapi 
 
 ## Template bawaan
 
-- Photostrip: 146 template bawaan, terdiri dari 26 warna Basic dan 120 tema dekoratif.
+- Photostrip: 146 template bawaan, terdiri dari 26 warna Basic dan 120 tema dekoratif. Seluruh template sekarang memiliki identitas LUX Photobooth berupa wordmark, camera mark, monogram, atau tagline yang disesuaikan dengan gaya kategorinya.
 - Photobox 4R: 30 template bawaan dengan layout 1–8 slot. Pemilih template memakai kategori yang sama seperti photostrip: Basic, Korean, Film, Elegant, Floral, Seasonal, Gaming, Pattern, dan Social Media. Template 1-slot memakai area foto yang lebih dominan, tanpa tulisan ukuran cetak, jumlah frame, atau badge nomor di dalam desain.
 - Ganci: frame bawaan tetap tersedia pada halaman Ganci.
 

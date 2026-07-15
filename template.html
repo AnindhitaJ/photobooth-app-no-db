@@ -1768,6 +1768,121 @@
     });
   }
 
+  function drawLuxCameraMark(ctx, x, y, size, bodyColor, lensColor) {
+    const bodyW = size * 1.34;
+    const bodyH = size * .82;
+    roundRect(ctx, x - bodyW / 2, y - bodyH / 2, bodyW, bodyH, size * .18, bodyColor);
+    roundRect(ctx, x - bodyW * .28, y - bodyH * .72, bodyW * .30, bodyH * .30, size * .08, bodyColor);
+    circle(ctx, x, y, size * .25, lensColor);
+    circle(ctx, x, y, size * .11, withAlpha('#ffffff', .68));
+    circle(ctx, x + bodyW * .30, y - bodyH * .18, size * .06, withAlpha('#ffffff', .82));
+  }
+
+  function drawPhotostripBranding(ctx, def, slots, options = {}) {
+    const isBasic = options.isBasic === true;
+    const ink = def.ink || def.text || '#1D3557';
+    const accent = def.accent || ink;
+    const accent2 = def.accent2 || '#D84B7E';
+    const last = slots[slots.length - 1];
+    const zoneTop = last.y + last.h;
+
+    if (isBasic) {
+      const centerY = zoneTop + (FRAME_H - zoneTop) * .52;
+      line(ctx, 82, zoneTop + 19, FRAME_W - 82, zoneTop + 19, withAlpha(ink, .22), 1.5);
+      drawLuxCameraMark(ctx, FRAME_W / 2 - 112, centerY - 5, 25, withAlpha(ink, .94), colorObjSafeContrast(accent2, ink));
+      text(ctx, 'LUX PHOTOBOOTH', FRAME_W / 2 + 16, centerY - 8, 22, ink, 950);
+      text(ctx, 'MAKE EVERY MOMENT LUX', FRAME_W / 2, centerY + 22, 10, withAlpha(ink, .72), 800);
+      return;
+    }
+
+    const category = def.category || 'Pattern';
+    let label = 'LUX PHOTOBOOTH';
+    let width = 292;
+    let fontSize = 16;
+    let fill = withAlpha('#ffffff', .74);
+    let stroke = withAlpha(accent, .44);
+    let color = ink;
+    let iconBody = accent;
+    let iconLens = accent2;
+
+    if (category === 'Korean') {
+      label = 'lux photobooth ♡';
+      width = 248;
+      fill = withAlpha('#ffffff', .82);
+      stroke = withAlpha(accent2, .52);
+      color = '#6d3e66';
+      fontSize = 16;
+    } else if (category === 'Film') {
+      label = 'LUX PHOTOBOOTH / 35MM';
+      width = 316;
+      fill = withAlpha('#050505', .82);
+      stroke = withAlpha(accent, .72);
+      color = '#ffffff';
+      iconBody = accent;
+      iconLens = color;
+      fontSize = 14;
+    } else if (category === 'Elegant') {
+      label = 'L U X  P H O T O B O O T H';
+      width = 342;
+      fill = withAlpha(def.bg, .86);
+      stroke = withAlpha(accent, .66);
+      fontSize = 13;
+    } else if (category === 'Floral') {
+      label = 'LUX PHOTOBOOTH ✿';
+      width = 274;
+      fill = withAlpha('#ffffff', .79);
+      stroke = withAlpha(accent2, .56);
+      color = '#6b294f';
+      fontSize = 15;
+    } else if (category === 'Seasonal') {
+      label = 'LUX PHOTOBOOTH • CELEBRATE';
+      width = 338;
+      fill = withAlpha('#ffffff', .76);
+      stroke = withAlpha(accent, .58);
+      color = '#1D3557';
+      fontSize = 13;
+    } else if (category === 'Gaming') {
+      label = 'LUX PHOTOBOOTH // PLAYER CAM';
+      width = 350;
+      fill = withAlpha('#050816', .84);
+      stroke = withAlpha(accent2, .76);
+      color = '#ffffff';
+      iconBody = accent;
+      iconLens = accent2;
+      fontSize = 13;
+    } else if (category === 'Pattern') {
+      label = 'LUX PHOTOBOOTH ★';
+      width = 274;
+      fill = withAlpha('#ffffff', .76);
+      stroke = withAlpha(accent, .54);
+      color = '#1D3557';
+      fontSize = 15;
+    } else if (category === 'Social Media') {
+      label = 'LUX PHOTOBOOTH • @luxphotobooth';
+      width = 374;
+      fill = withAlpha('#ffffff', .88);
+      stroke = withAlpha(accent, .54);
+      color = '#1D3557';
+      fontSize = 12;
+    }
+
+    const y = FRAME_H - 49;
+    const h = 40;
+    roundRect(ctx, FRAME_W / 2 - width / 2, y - h / 2, width, h, 20, fill, stroke, 1.8);
+    drawLuxCameraMark(ctx, FRAME_W / 2 - width / 2 + 27, y, 19, iconBody, iconLens);
+    text(ctx, label, FRAME_W / 2 + 12, y + 1, fontSize, color, 900);
+
+    // Small monogram gives every frame a consistent LUX signature without covering photos.
+    const sealX = FRAME_W - 46;
+    const sealY = 48;
+    circle(ctx, sealX, sealY, 22, withAlpha((category === 'Film' || category === 'Gaming') ? '#ffffff' : accent, .16), stroke);
+    text(ctx, 'LUX', sealX, sealY + 1, 9, color, 950);
+  }
+
+  function colorObjSafeContrast(primary, fallback) {
+    return primary || fallback || '#D84B7E';
+  }
+
   // Render basic frame as PNG using canvas (591x1772)
   function generateBasicFrameSrc(colorObj) {
     const W = FRAME_W, H = FRAME_H;
@@ -1778,6 +1893,7 @@
     ctx.fillStyle = colorObj.bg;
     ctx.fillRect(0, 0, W, H);
     slots.forEach(s => ctx.clearRect(s.x, s.y, s.w, s.h));
+    drawPhotostripBranding(ctx, { text: colorObj.text, accent: colorObj.text, accent2: '#D84B7E' }, slots, { isBasic: true });
     return { src: c.toDataURL('image/png'), slots, w: W, h: H };
   }
 
@@ -1818,6 +1934,7 @@
     drawSlotBorders(ctx, slots, def);
     roundRect(ctx, 12, 12, W - 24, H - 24, 30, null, withAlpha(def.accent, .54), 3.5);
     roundRect(ctx, 26, 26, W - 52, H - 52, 24, null, withAlpha('#ffffff', .28), 1.5);
+    drawPhotostripBranding(ctx, def, slots);
 
     const data = { src: c.toDataURL('image/png'), slots, w: W, h: H };
     builtInCache.set(def.id, data);
