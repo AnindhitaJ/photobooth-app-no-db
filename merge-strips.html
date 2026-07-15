@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <meta name="theme-color" content="#1D3557">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Gabung 2 Photostrip 4R - LUX Photobooth</title>
+  <style>
+    :root {
+      --pink:#D84B7E; --gold:#E5B842; --navy:#1D3557; --bg:#FFF8FC;
+      --border:#f5c6da; --muted:#6b7fa3; --card:#ffffff;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      min-height:100vh; padding:18px 18px 42px; color:var(--navy);
+      background:var(--bg); font-family:'Segoe UI',system-ui,sans-serif;
+    }
+    body::before {
+      content:''; position:fixed; inset:0; z-index:-1;
+      background-image:radial-gradient(circle,rgba(216,75,126,.08) 1px,transparent 1px);
+      background-size:28px 28px;
+    }
+    .topbar { max-width:1080px; margin:0 auto 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:-.4px; }
+    .brand img { width:42px; height:42px; border-radius:50%; object-fit:cover; }
+    .back { border:2px solid var(--border); background:white; color:var(--navy); border-radius:999px; padding:10px 15px; font:inherit; font-weight:850; cursor:pointer; }
+    .shell { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:minmax(320px,440px) minmax(320px,1fr); gap:18px; align-items:start; }
+    .panel { background:rgba(255,255,255,.96); border:2px solid var(--border); border-radius:24px; padding:18px; box-shadow:0 12px 34px rgba(29,53,87,.10); }
+    h1 { font-size:clamp(25px,4vw,36px); line-height:1.05; letter-spacing:-1px; margin-bottom:8px; }
+    .lead { color:var(--muted); font-size:14px; line-height:1.55; font-weight:650; margin-bottom:16px; }
+    .privacy { padding:11px 13px; background:#f0fdf4; border:1.5px solid #bbf7d0; color:#166534; border-radius:14px; font-size:12px; font-weight:800; margin-bottom:16px; }
+    .upload-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .upload-card { border:2px dashed #e8aac5; background:#fff8fc; border-radius:18px; min-height:210px; padding:12px; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .upload-card.has-image { border-style:solid; background:white; }
+    .upload-preview { width:100%; height:150px; object-fit:contain; border-radius:12px; background:#f8fafc; display:none; }
+    .upload-card.has-image .upload-preview { display:block; }
+    .empty-icon { font-size:34px; }
+    .upload-card.has-image .empty-icon, .upload-card.has-image .empty-text { display:none; }
+    .empty-text { color:var(--muted); font-size:12px; font-weight:750; text-align:center; line-height:1.35; }
+    .file-button { width:100%; border:0; border-radius:999px; padding:10px 12px; background:linear-gradient(135deg,var(--pink),var(--navy)); color:white; font:inherit; font-weight:900; cursor:pointer; text-align:center; }
+    .file-button input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .mini-actions { display:flex; gap:8px; width:100%; }
+    .mini-actions button { flex:1; border:1.5px solid var(--border); background:white; border-radius:999px; padding:8px; color:var(--navy); font:inherit; font-size:12px; font-weight:850; cursor:pointer; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+    .control { display:flex; flex-direction:column; gap:6px; }
+    .control label { font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); font-weight:900; }
+    select { width:100%; border:2px solid var(--border); border-radius:13px; background:white; color:var(--navy); padding:11px 12px; font:inherit; font-weight:750; outline:none; }
+    select:focus { border-color:var(--pink); }
+    .wide-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+    .action { border:0; border-radius:999px; padding:13px 14px; font:inherit; font-weight:900; cursor:pointer; }
+    .secondary { background:white; color:var(--navy); border:2px solid var(--border); }
+    .primary { background:linear-gradient(135deg,var(--pink),var(--navy)); color:white; box-shadow:0 8px 20px rgba(216,75,126,.28); }
+    .primary:disabled { opacity:.42; cursor:not-allowed; box-shadow:none; }
+    .status { min-height:22px; margin-top:10px; color:var(--muted); font-size:12px; font-weight:800; text-align:center; }
+    .preview-panel { display:flex; flex-direction:column; align-items:center; }
+    .preview-title { width:100%; display:flex; justify-content:space-between; gap:12px; align-items:flex-end; margin-bottom:12px; }
+    .preview-title h2 { font-size:20px; }
+    .preview-title span { color:var(--muted); font-size:12px; font-weight:800; }
+    .canvas-wrap { width:min(100%,470px); padding:12px; background:#eef2f7; border-radius:22px; border:2px solid #dbe4ef; }
+    canvas { width:100%; height:auto; display:block; background:white; border-radius:12px; box-shadow:0 10px 28px rgba(15,23,42,.18); }
+    .spec { margin-top:12px; width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .spec div { background:#fff8fc; border:1.5px solid var(--border); border-radius:13px; padding:9px; text-align:center; }
+    .spec b { display:block; font-size:13px; }
+    .spec span { font-size:10px; color:var(--muted); font-weight:750; }
+    @media (max-width:820px) { .shell { grid-template-columns:1fr; } .preview-panel { order:-1; } .canvas-wrap { width:min(100%,400px); } }
+    @media (max-width:520px) { body { padding:12px 10px 34px; } .panel { padding:14px; border-radius:20px; } .upload-grid,.controls,.wide-actions { grid-template-columns:1fr; } .upload-card { min-height:180px; } .topbar { margin-bottom:12px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="/logo.png" alt="LUX"><span>LUX PHOTOBOOTH</span></div>
+    <button class="back" type="button" onclick="location.href='/'">← Beranda</button>
+  </header>
+
+  <main class="shell">
+    <section class="panel">
+      <h1>Gabung 2 Photostrip</h1>
+      <p class="lead">Pilih dua hasil photostrip dari galeri HP. Keduanya akan disusun berdampingan menjadi satu file cetak 4R portrait.</p>
+      <div class="privacy">🔒 Foto hanya diproses di browser perangkat ini dan tidak diunggah.</div>
+
+      <div class="upload-grid">
+        <div class="upload-card" id="card0">
+          <div class="empty-icon">🎞️</div>
+          <div class="empty-text">Photostrip kiri<br>pilih dari galeri</div>
+          <img class="upload-preview" id="preview0" alt="Preview strip kiri">
+          <label class="file-button">Pilih Strip 1<input id="file0" type="file" accept="image/*"></label>
+          <div class="mini-actions">
+            <button type="button" onclick="rotateStrip(0)">↻ Putar</button>
+            <button type="button" onclick="clearStrip(0)">Hapus</button>
+          </div>
+        </div>
+        <div class="upload-card" id="card1">
+          <div class="empty-icon">🎞️</div>
+          <div class="empty-text">Photostrip kanan<br>pilih dari galeri</div>
+          <img class="upload-preview" id="preview1" alt="Preview strip kanan">
+          <label class="file-button">Pilih Strip 2<input id="file1" type="file" accept="image/*"></label>
+          <div class="mini-actions">
+            <button type="button" onclick="rotateStrip(1)">↻ Putar</button>
+            <button type="button" onclick="clearStrip(1)">Hapus</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="fitMode">Penyesuaian foto</label>
+          <select id="fitMode">
+            <option value="cover" selected>Penuhi area strip (disarankan)</option>
+            <option value="contain">Tampilkan utuh</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="dividerMode">Pemisah tengah</label>
+          <select id="dividerMode">
+            <option value="0">Tanpa jarak</option>
+            <option value="8">Garis putih tipis</option>
+            <option value="20">Jarak putih</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="backgroundColor">Warna area kosong</label>
+          <select id="backgroundColor">
+            <option value="#ffffff">Putih</option>
+            <option value="#fff1f7">Soft Pink</option>
+            <option value="#111827">Hitam</option>
+            <option value="#f5f0e8">Krem</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="quality">Kualitas JPG</label>
+          <select id="quality">
+            <option value="0.98">Maksimal</option>
+            <option value="0.94" selected>Tinggi</option>
+            <option value="0.88">Hemat ukuran</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wide-actions">
+        <button class="action secondary" type="button" onclick="swapStrips()">⇄ Tukar Posisi</button>
+        <button class="action primary" id="downloadBtn" type="button" onclick="downloadResult()" disabled>Download JPG 4R</button>
+      </div>
+      <div class="status" id="status">Pilih dua photostrip untuk mulai.</div>
+    </section>
+
+    <section class="panel preview-panel">
+      <div class="preview-title">
+        <div><h2>Preview Cetak</h2><span>Dua strip berdampingan pada kanvas 4R. Gunakan “Tampilkan utuh” bila tidak ingin ada bagian yang terpotong.</span></div>
+      </div>
+      <div class="canvas-wrap"><canvas id="canvas" width="1181" height="1772"></canvas></div>
+      <div class="spec">
+        <div><b>1181 × 1772 px</b><span>kanvas output</span></div>
+        <div><b>10 × 15 cm</b><span>rasio cetak 4R</span></div>
+        <div><b>2 photostrip</b><span>kiri dan kanan</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const OUTPUT_W = 1181;
+    const OUTPUT_H = 1772;
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const strips = [null, null];
+    const rotations = [0, 0];
+    const objectUrls = [null, null];
+
+    function setStatus(message, isError = false) {
+      const el = document.getElementById('status');
+      el.textContent = message;
+      el.style.color = isError ? '#be123c' : '#6b7fa3';
+    }
+
+    function drawPlaceholder() {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, OUTPUT_W, OUTPUT_H);
+      ctx.strokeStyle = '#f5c6da';
+      ctx.lineWidth = 5;
+      ctx.setLineDash([18, 14]);
+      ctx.strokeRect(20, 20, OUTPUT_W - 40, OUTPUT_H - 40);
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#1D3557';
+      ctx.textAlign = 'center';
+      ctx.font = '900 48px Segoe UI, sans-serif';
+      ctx.fillText('2 PHOTO STRIPS · 4R', OUTPUT_W / 2, OUTPUT_H / 2 - 28);
+      ctx.fillStyle = '#6b7fa3';
+      ctx.font = '700 28px Segoe UI, sans-serif';
+      ctx.fillText('pilih strip kiri dan kanan', OUTPUT_W / 2, OUTPUT_H / 2 + 30);
+    }
+
+    function loadImageFromFile(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => resolve({ img, url });
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Format gambar tidak dapat dibaca browser.')); };
+        img.src = url;
+      });
+    }
+
+    async function handleFile(index, file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        setStatus('File harus berupa gambar.', true);
+        return;
+      }
+      try {
+        const loaded = await loadImageFromFile(file);
+        if (objectUrls[index]) URL.revokeObjectURL(objectUrls[index]);
+        objectUrls[index] = loaded.url;
+        strips[index] = loaded.img;
+        rotations[index] = 0;
+        const preview = document.getElementById(`preview${index}`);
+        preview.src = loaded.url;
+        document.getElementById(`card${index}`).classList.add('has-image');
+        render();
+      } catch (error) {
+        setStatus(error.message || 'Gagal membaca gambar.', true);
+      }
+    }
+
+    function getRotatedSize(img, rotation) {
+      return rotation % 180 === 0 ? { w: img.naturalWidth, h: img.naturalHeight } : { w: img.naturalHeight, h: img.naturalWidth };
+    }
+
+    function drawStrip(img, rotation, x, y, w, h, mode, background) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.clip();
+      ctx.fillStyle = background;
+      ctx.fillRect(x, y, w, h);
+
+      const size = getRotatedSize(img, rotation);
+      const scale = mode === 'cover' ? Math.max(w / size.w, h / size.h) : Math.min(w / size.w, h / size.h);
+      const dw = size.w * scale;
+      const dh = size.h * scale;
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+
+      ctx.translate(cx, cy);
+      ctx.rotate(rotation * Math.PI / 180);
+      const sourceW = img.naturalWidth;
+      const sourceH = img.naturalHeight;
+      const actualDw = sourceW * scale;
+      const actualDh = sourceH * scale;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, -actualDw / 2, -actualDh / 2, actualDw, actualDh);
+      ctx.restore();
+    }
+
+    function render() {
+      if (!strips[0] && !strips[1]) {
+        drawPlaceholder();
+        document.getElementById('downloadBtn').disabled = true;
+        setStatus('Pilih dua photostrip untuk mulai.');
+        return;
+      }
+
+      const background = document.getElementById('backgroundColor').value;
+      const divider = Number(document.getElementById('dividerMode').value || 0);
+      const mode = document.getElementById('fitMode').value;
+      ctx.fillStyle = background;
+      ctx.fillRect(0, 0, OUTPUT_W, OUTPUT_H);
+
+      const leftW = Math.floor((OUTPUT_W - divider) / 2);
+      const rightW = OUTPUT_W - divider - leftW;
+      if (strips[0]) drawStrip(strips[0], rotations[0], 0, 0, leftW, OUTPUT_H, mode, background);
+      if (strips[1]) drawStrip(strips[1], rotations[1], leftW + divider, 0, rightW, OUTPUT_H, mode, background);
+
+      if (divider > 0) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(leftW, 0, divider, OUTPUT_H);
+      }
+
+      const ready = Boolean(strips[0] && strips[1]);
+      document.getElementById('downloadBtn').disabled = !ready;
+      setStatus(ready ? 'Siap didownload sebagai JPG ukuran 4R.' : 'Masukkan satu photostrip lagi.');
+    }
+
+    function rotateStrip(index) {
+      if (!strips[index]) return;
+      rotations[index] = (rotations[index] + 90) % 360;
+      render();
+    }
+
+    function clearStrip(index) {
+      strips[index] = null;
+      rotations[index] = 0;
+      if (objectUrls[index]) URL.revokeObjectURL(objectUrls[index]);
+      objectUrls[index] = null;
+      document.getElementById(`preview${index}`).removeAttribute('src');
+      document.getElementById(`file${index}`).value = '';
+      document.getElementById(`card${index}`).classList.remove('has-image');
+      render();
+    }
+
+    function swapStrips() {
+      [strips[0], strips[1]] = [strips[1], strips[0]];
+      [rotations[0], rotations[1]] = [rotations[1], rotations[0]];
+      [objectUrls[0], objectUrls[1]] = [objectUrls[1], objectUrls[0]];
+      for (let i = 0; i < 2; i++) {
+        const card = document.getElementById(`card${i}`);
+        const preview = document.getElementById(`preview${i}`);
+        if (strips[i] && objectUrls[i]) { preview.src = objectUrls[i]; card.classList.add('has-image'); }
+        else { preview.removeAttribute('src'); card.classList.remove('has-image'); }
+      }
+      render();
+    }
+
+    function canvasToBlob(canvasEl, type, quality) {
+      return new Promise((resolve, reject) => canvasEl.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat file gambar.')), type, quality));
+    }
+
+    async function downloadResult() {
+      if (!strips[0] || !strips[1]) return;
+      const button = document.getElementById('downloadBtn');
+      const previous = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Membuat file...';
+      try {
+        render();
+        const quality = Number(document.getElementById('quality').value || .94);
+        const blob = await canvasToBlob(canvas, 'image/jpeg', quality);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `lux-2-photostrip-4r-${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1200);
+        setStatus('Download selesai. File berukuran 1181 × 1772 px.');
+      } catch (error) {
+        setStatus(error.message || 'Gagal mendownload file.', true);
+      } finally {
+        button.textContent = previous;
+        button.disabled = !(strips[0] && strips[1]);
+      }
+    }
+
+    document.getElementById('file0').addEventListener('change', event => handleFile(0, event.target.files?.[0]));
+    document.getElementById('file1').addEventListener('change', event => handleFile(1, event.target.files?.[0]));
+    ['fitMode','dividerMode','backgroundColor'].forEach(id => document.getElementById(id).addEventListener('change', render));
+    drawPlaceholder();
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+  </script>
+</body>
+</html>

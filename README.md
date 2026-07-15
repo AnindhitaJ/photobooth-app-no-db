@@ -4,9 +4,10 @@ Versi ini mempertahankan visual dan alur kamera utama dari project awal, tetapi 
 
 ## Produk aktif
 
-- Photostrip 5×15
-- Photobox 4R / 10×15
-- Ganci photo insert
+- Photostrip 5×15.
+- Photobox 4R / 10×15.
+- Ganci.
+- Gabung dua photostrip dari galeri HP menjadi satu lembar 4R siap download.
 
 ## Arsitektur
 
@@ -17,11 +18,15 @@ Versi ini mempertahankan visual dan alur kamera utama dari project awal, tetapi 
 
 ## Template bawaan
 
-- Photostrip: 136 template bawaan (16 basic colors + 120 tema dekoratif).
-- Photobox 4R: 18 template bawaan.
+- Photostrip: 146 template bawaan, terdiri dari 26 warna Basic dan 120 tema dekoratif.
+- Photobox 4R: 30 template bawaan dengan layout 1–8 slot, termasuk grid, hero, split, stack, triptych, contact sheet, dan mosaic.
 - Ganci: frame bawaan tetap tersedia pada halaman Ganci.
 
-Jumlah di atas divalidasi oleh `scripts/validate_repo.py`.
+## Gabung 2 Photostrip
+
+Halaman `merge-strips.html` menerima dua gambar dari galeri perangkat, menyusunnya berdampingan pada kanvas 4R portrait 1181 × 1772 px, lalu menghasilkan file JPG. Pengguna dapat memutar gambar, menukar posisi, memilih mode fit, pemisah tengah, latar, dan kualitas JPG. Semua proses berlangsung lokal.
+
+Jumlah template dan struktur paket divalidasi oleh `scripts/validate_repo.py`.
 
 ## Menjalankan lokal
 
@@ -31,7 +36,7 @@ npm run serve
 
 Lalu buka `http://localhost:4173`.
 
-Kamera browser membutuhkan secure context. Untuk deployment produksi gunakan HTTPS; Vercel sudah menyediakan HTTPS otomatis.
+Kamera browser membutuhkan secure context. Untuk deployment produksi gunakan HTTPS; Vercel menyediakan HTTPS otomatis.
 
 ## Deployment Vercel
 
@@ -39,4 +44,4 @@ Import folder ini sebagai project Vercel dengan Framework Preset **Other**. Tida
 
 ## Batas versi tanpa backend
 
-QR lintas perangkat, galeri cloud, akun, template upload permanen, event mode, analytics, dan sinkronisasi tidak tersedia karena fitur tersebut membutuhkan server atau storage bersama. Download, share, print, GIF, live photo, filter, dan layout ganci tetap berjalan secara lokal bila browser mendukung API terkait.
+QR lintas perangkat, galeri cloud, akun, template upload permanen, event mode, analytics, dan sinkronisasi tidak tersedia karena fitur tersebut membutuhkan server atau storage bersama. Download, share, print, GIF, live photo, filter, layout ganci, dan penggabungan strip tetap berjalan secara lokal bila browser mendukung API terkait.

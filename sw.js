@@ -1,6 +1,6 @@
-const CACHE_NAME = 'lux-photobooth-local-v2';
+const CACHE_NAME = 'lux-photobooth-local-v3';
 const CORE_ASSETS = [
-  '/', '/index.html', '/template.html', '/camera.html', '/filter.html', '/result.html', '/ganci.html',
+  '/', '/index.html', '/template.html', '/camera.html', '/filter.html', '/result.html', '/ganci.html', '/merge-strips.html',
 '/local-camera.js', '/beautify.js', '/ganci-utils.js', '/ganci-print.js',
   '/manifest.json', '/logo.png', '/logo.svg', '/icon-192.png', '/icon-512.png'
 ];

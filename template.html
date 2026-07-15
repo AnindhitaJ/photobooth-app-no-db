@@ -221,22 +221,32 @@
   const FRAME_FOOTER_H = 90;
 
   const FRAME_COLORS = [
-    { label: 'Putih',     bg: '#ffffff',   text: '#1D3557' },
-    { label: 'Hitam',     bg: '#1D3557',   text: '#ffffff' },
-    { label: 'Pink',      bg: '#D84B7E',   text: '#ffffff' },
-    { label: 'Merah',     bg: '#e94560',   text: '#ffffff' },
-    { label: 'Gold',      bg: '#E5B842',   text: '#1D3557' },
-    { label: 'Emas',      bg: '#f5a623',   text: '#1D3557' },
-    { label: 'Biru',      bg: '#3b82f6',   text: '#ffffff' },
-    { label: 'Hijau',     bg: '#22c55e',   text: '#1D3557' },
-    { label: 'Ungu',      bg: '#8b5cf6',   text: '#ffffff' },
-    { label: 'Krem',      bg: '#f5f0e8',   text: '#1D3557' },
-    { label: 'Peach',     bg: '#ffedd5',   text: '#9a3412' },
-    { label: 'Mint',      bg: '#dcfce7',   text: '#166534' },
-    { label: 'Lilac',     bg: '#ede9fe',   text: '#5b21b6' },
-    { label: 'Sky',       bg: '#e0f2fe',   text: '#075985' },
-    { label: 'Coral',     bg: '#fb7185',   text: '#ffffff' },
-    { label: 'Charcoal',  bg: '#27272a',   text: '#ffffff' },
+    { label: 'Putih',       bg: '#ffffff',   text: '#1D3557' },
+    { label: 'Hitam',       bg: '#1D3557',   text: '#ffffff' },
+    { label: 'Pink',        bg: '#D84B7E',   text: '#ffffff' },
+    { label: 'Merah',       bg: '#e94560',   text: '#ffffff' },
+    { label: 'Gold',        bg: '#E5B842',   text: '#1D3557' },
+    { label: 'Emas',        bg: '#f5a623',   text: '#1D3557' },
+    { label: 'Biru',        bg: '#3b82f6',   text: '#ffffff' },
+    { label: 'Hijau',       bg: '#22c55e',   text: '#1D3557' },
+    { label: 'Ungu',        bg: '#8b5cf6',   text: '#ffffff' },
+    { label: 'Krem',        bg: '#f5f0e8',   text: '#1D3557' },
+    { label: 'Peach',       bg: '#ffedd5',   text: '#9a3412' },
+    { label: 'Mint',        bg: '#dcfce7',   text: '#166534' },
+    { label: 'Lilac',       bg: '#ede9fe',   text: '#5b21b6' },
+    { label: 'Sky',         bg: '#e0f2fe',   text: '#075985' },
+    { label: 'Coral',       bg: '#fb7185',   text: '#ffffff' },
+    { label: 'Charcoal',    bg: '#27272a',   text: '#ffffff' },
+    { label: 'Rose',        bg: '#ffe4e6',   text: '#9f1239' },
+    { label: 'Sage',        bg: '#dce8d5',   text: '#365314' },
+    { label: 'Butter',      bg: '#fef3c7',   text: '#78350f' },
+    { label: 'Baby Blue',   bg: '#dbeafe',   text: '#1e3a8a' },
+    { label: 'Plum',        bg: '#581c87',   text: '#ffffff' },
+    { label: 'Terracotta',  bg: '#c65d3b',   text: '#ffffff' },
+    { label: 'Teal',        bg: '#0f766e',   text: '#ffffff' },
+    { label: 'Mocha',       bg: '#8b6f61',   text: '#ffffff' },
+    { label: 'Silver',      bg: '#e2e8f0',   text: '#334155' },
+    { label: 'Midnight',    bg: '#0f172a',   text: '#f8fafc' },
   ];
   let selectedFrameColor = FRAME_COLORS[0];
 
@@ -267,25 +277,51 @@
   }
 
   const PHOTOBOX_DEFS = [
-    { id:'photobox_soft_pink', name:'Soft Pink 4R', bg:'#fff1f7', accent:'#D84B7E', accent2:'#f9a8d4', ink:'#1D3557', layout:'four' },
-    { id:'photobox_clean_white', name:'Clean White 4R', bg:'#ffffff', accent:'#1D3557', accent2:'#E5B842', ink:'#1D3557', layout:'two' },
-    { id:'photobox_korean_cute', name:'Korean Cute 4R', bg:'#f5efff', accent:'#a78bfa', accent2:'#f9a8d4', ink:'#6d5b8d', layout:'three' },
-    { id:'photobox_gold_frame', name:'Gold Frame 4R', bg:'#fff8e1', accent:'#E5B842', accent2:'#D84B7E', ink:'#1D3557', layout:'big' },
-    { id:'photobox_navy_classic', name:'Navy Classic 4R', bg:'#1D3557', accent:'#E5B842', accent2:'#ffffff', ink:'#ffffff', layout:'four' },
-    { id:'photobox_party_pop', name:'Party Pop 4R', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', layout:'three' },
-    { id:'photobox_sakura_day', name:'Sakura Day 4R', bg:'#fff1f7', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', layout:'four' },
-    { id:'photobox_matcha_mood', name:'Matcha Mood 4R', bg:'#f3fae8', accent:'#84a96b', accent2:'#d9f99d', ink:'#365314', layout:'three' },
-    { id:'photobox_retro_film', name:'Retro Film 4R', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', layout:'two' },
-    { id:'photobox_blue_cloud', name:'Blue Cloud 4R', bg:'#eff6ff', accent:'#60a5fa', accent2:'#bae6fd', ink:'#1e3a8a', layout:'four' },
-    { id:'photobox_lilac_dream', name:'Lilac Dream 4R', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#f0abfc', ink:'#5b21b6', layout:'three' },
-    { id:'photobox_botanical', name:'Botanical 4R', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', layout:'big' },
-    { id:'photobox_monochrome', name:'Monochrome 4R', bg:'#f8fafc', accent:'#111827', accent2:'#94a3b8', ink:'#111827', layout:'two' },
-    { id:'photobox_valentine', name:'Valentine 4R', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', layout:'four' },
-    { id:'photobox_arcade', name:'Arcade Neon 4R', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', layout:'three' },
-    { id:'photobox_champagne', name:'Champagne 4R', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', layout:'big' },
-    { id:'photobox_summer', name:'Summer Pop 4R', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', layout:'four' },
-    { id:'photobox_midnight', name:'Midnight Star 4R', bg:'#020617', accent:'#facc15', accent2:'#a78bfa', ink:'#f8fafc', layout:'two' }
+    // 1 slot
+    { id:'photobox_editorial_one', name:'Editorial Cover', slots:1, layout:'one_editorial', bg:'#f8fafc', accent:'#111827', accent2:'#cbd5e1', ink:'#111827', motif:'minimal', border:'square', title:'EDITORIAL MOMENT' },
+    { id:'photobox_polaroid_one', name:'Polaroid Memory', slots:1, layout:'one_polaroid', bg:'#fff7ed', accent:'#b45309', accent2:'#fed7aa', ink:'#78350f', motif:'paper', border:'polaroid', title:'ONE GOOD MEMORY' },
+    { id:'photobox_cinema_one', name:'Cinema Wide', slots:1, layout:'one_cinema', bg:'#09090b', accent:'#f59e0b', accent2:'#ef4444', ink:'#fff7ed', motif:'film', border:'film', title:'CINEMA FRAME' },
 
+    // 2 slot
+    { id:'photobox_clean_stack', name:'Clean Double Stack', slots:2, layout:'two_stack', bg:'#ffffff', accent:'#1D3557', accent2:'#E5B842', ink:'#1D3557', motif:'minimal', border:'soft', title:'TWO OF US' },
+    { id:'photobox_split_sky', name:'Sky Split Portrait', slots:2, layout:'two_split', bg:'#eff6ff', accent:'#3b82f6', accent2:'#bae6fd', ink:'#1e3a8a', motif:'cloud', border:'pill', title:'SIDE BY SIDE' },
+    { id:'photobox_hero_story', name:'Hero & Detail', slots:2, layout:'two_hero', bg:'#fff1f7', accent:'#D84B7E', accent2:'#f9a8d4', ink:'#1D3557', motif:'hearts', border:'soft', title:'MAIN CHARACTER' },
+    { id:'photobox_diagonal_duo', name:'Asymmetric Duo', slots:2, layout:'two_diagonal', bg:'#f5f3ff', accent:'#8b5cf6', accent2:'#22d3ee', ink:'#4c1d95', motif:'geometry', border:'square', title:'DUO STORY' },
+
+    // 3 slot
+    { id:'photobox_triptych_navy', name:'Navy Triptych', slots:3, layout:'three_triptych', bg:'#0f172a', accent:'#facc15', accent2:'#38bdf8', ink:'#f8fafc', motif:'stars', border:'square', title:'THREE CHAPTERS' },
+    { id:'photobox_sakura_hero', name:'Sakura Hero Pair', slots:3, layout:'three_hero_pair', bg:'#fff1f7', accent:'#f472b6', accent2:'#fecdd3', ink:'#9d174d', motif:'floral', border:'soft', title:'BLOOM TOGETHER' },
+    { id:'photobox_retro_three', name:'Retro Three Stack', slots:3, layout:'three_stack', bg:'#fef3c7', accent:'#ea580c', accent2:'#84cc16', ink:'#7c2d12', motif:'retro', border:'film', title:'RETRO REPLAY' },
+    { id:'photobox_botanical_three', name:'Botanical Story', slots:3, layout:'three_story', bg:'#ecfdf5', accent:'#10b981', accent2:'#bbf7d0', ink:'#065f46', motif:'botanical', border:'soft', title:'GREEN MOMENTS' },
+
+    // 4 slot
+    { id:'photobox_soft_pink_grid', name:'Soft Pink Grid', slots:4, layout:'four_grid', bg:'#fff1f7', accent:'#D84B7E', accent2:'#f9a8d4', ink:'#1D3557', motif:'dots', border:'soft', title:'PHOTOBOX 4R' },
+    { id:'photobox_monochrome_stack', name:'Monochrome Stack', slots:4, layout:'four_stack', bg:'#f8fafc', accent:'#111827', accent2:'#94a3b8', ink:'#111827', motif:'grid', border:'square', title:'CONTACT NOTES' },
+    { id:'photobox_gold_feature', name:'Gold Feature + Three', slots:4, layout:'four_hero_three', bg:'#fff8e1', accent:'#b58935', accent2:'#E5B842', ink:'#65420c', motif:'sparkle', border:'soft', title:'GOLDEN HOUR' },
+    { id:'photobox_arcade_four', name:'Arcade Four', slots:4, layout:'four_grid_wide', bg:'#12002f', accent:'#22d3ee', accent2:'#ff2bd6', ink:'#ffffff', motif:'neon', border:'square', title:'PLAYER SELECT' },
+    { id:'photobox_film_bands', name:'Film Bands', slots:4, layout:'four_bands', bg:'#171717', accent:'#f59e0b', accent2:'#faf3dd', ink:'#ffffff', motif:'film', border:'film', title:'ROLL 04' },
+
+    // 5 slot
+    { id:'photobox_matcha_five', name:'Matcha Feature Five', slots:5, layout:'five_feature', bg:'#f3fae8', accent:'#84a96b', accent2:'#d9f99d', ink:'#365314', motif:'botanical', border:'soft', title:'MATCHA DAYS' },
+    { id:'photobox_party_five', name:'Party Hero Five', slots:5, layout:'five_top_hero', bg:'#fff7ed', accent:'#fb7185', accent2:'#60a5fa', ink:'#1D3557', motif:'confetti', border:'pill', title:'PARTY PEOPLE' },
+    { id:'photobox_lilac_mosaic', name:'Lilac Mosaic Five', slots:5, layout:'five_mosaic', bg:'#f5f3ff', accent:'#a78bfa', accent2:'#f0abfc', ink:'#5b21b6', motif:'geometry', border:'soft', title:'LILAC MEMORIES' },
+    { id:'photobox_newspaper_five', name:'Newspaper Five', slots:5, layout:'five_stripmix', bg:'#f8fafc', accent:'#111827', accent2:'#cbd5e1', ink:'#111827', motif:'paper', border:'square', title:'THE DAILY FRAME' },
+
+    // 6 slot
+    { id:'photobox_blue_six', name:'Blue Six Grid', slots:6, layout:'six_grid_2x3', bg:'#eff6ff', accent:'#60a5fa', accent2:'#bae6fd', ink:'#1e3a8a', motif:'cloud', border:'soft', title:'SIX SMALL JOYS' },
+    { id:'photobox_summer_six', name:'Summer Six Landscape', slots:6, layout:'six_grid_3x2', bg:'#ecfeff', accent:'#06b6d4', accent2:'#f97316', ink:'#155e75', motif:'waves', border:'pill', title:'SUMMER ROLL' },
+    { id:'photobox_midnight_six', name:'Midnight Hero Six', slots:6, layout:'six_hero_five', bg:'#020617', accent:'#facc15', accent2:'#a78bfa', ink:'#f8fafc', motif:'stars', border:'square', title:'MIDNIGHT FILES' },
+    { id:'photobox_checker_six', name:'Checker Story Six', slots:6, layout:'six_story', bg:'#fff7ed', accent:'#111827', accent2:'#fb7185', ink:'#111827', motif:'checker', border:'film', title:'CHECKER STORY' },
+
+    // 7 slot
+    { id:'photobox_champagne_seven', name:'Champagne Seven', slots:7, layout:'seven_3_4', bg:'#fbf1d3', accent:'#b58935', accent2:'#fff7d6', ink:'#65420c', motif:'sparkle', border:'soft', title:'SEVEN TOASTS' },
+    { id:'photobox_neon_seven', name:'Neon Feature Seven', slots:7, layout:'seven_feature', bg:'#09090b', accent:'#22d3ee', accent2:'#f43f5e', ink:'#ffffff', motif:'neon', border:'square', title:'NIGHT SEQUENCE' },
+    { id:'photobox_valentine_seven', name:'Valentine Story Seven', slots:7, layout:'seven_story', bg:'#fff1f2', accent:'#e11d48', accent2:'#f9a8d4', ink:'#881337', motif:'hearts', border:'soft', title:'SEVEN LOVE NOTES' },
+
+    // 8 slot
+    { id:'photobox_contact_eight', name:'Contact Sheet Eight', slots:8, layout:'eight_2x4', bg:'#f8fafc', accent:'#111827', accent2:'#64748b', ink:'#111827', motif:'grid', border:'square', title:'CONTACT SHEET 08' },
+    { id:'photobox_disco_eight', name:'Disco Eight', slots:8, layout:'eight_4x2', bg:'#1e1b4b', accent:'#c084fc', accent2:'#22d3ee', ink:'#f5f3ff', motif:'disco', border:'pill', title:'DISCO MEMORIES' },
+    { id:'photobox_coral_eight', name:'Coral Mosaic Eight', slots:8, layout:'eight_mosaic', bg:'#fff7ed', accent:'#fb7185', accent2:'#fdba74', ink:'#9a3412', motif:'confetti', border:'soft', title:'EIGHT HAPPY FRAMES' }
   ];
 
   const BUILTIN_FRAME_DEFS = [
@@ -1789,24 +1825,133 @@
 
 
   function generatePhotoboxSlots(layout) {
+    const X = 76, Y = 210, W = 1029, H = 1320, G = 28;
     const slots = [];
-    if (layout === 'two') {
-      slots.push({ x: 86, y: 240, w: 1009, h: 560, r: 0 });
-      slots.push({ x: 86, y: 860, w: 1009, h: 560, r: 0 });
-    } else if (layout === 'three') {
-      slots.push({ x: 88, y: 205, w: 1005, h: 570, r: 0 });
-      slots.push({ x: 88, y: 840, w: 485, h: 500, r: 0 });
-      slots.push({ x: 608, y: 840, w: 485, h: 500, r: 0 });
-    } else if (layout === 'big') {
-      slots.push({ x: 96, y: 220, w: 989, h: 820, r: 0 });
-      slots.push({ x: 96, y: 1105, w: 989, h: 360, r: 0 });
-    } else {
-      slots.push({ x: 82, y: 210, w: 488, h: 475, r: 0 });
-      slots.push({ x: 611, y: 210, w: 488, h: 475, r: 0 });
-      slots.push({ x: 82, y: 745, w: 488, h: 475, r: 0 });
-      slots.push({ x: 611, y: 745, w: 488, h: 475, r: 0 });
+    const add = (x, y, w, h) => slots.push({ x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h), r: 0 });
+    const grid = (cols, rows, x = X, y = Y, w = W, h = H, gap = G) => {
+      const cw = (w - gap * (cols - 1)) / cols;
+      const ch = (h - gap * (rows - 1)) / rows;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) add(x + col * (cw + gap), y + row * (ch + gap), cw, ch);
+      }
+    };
+
+    switch (layout) {
+      case 'one_editorial': add(106, 228, 969, 1210); break;
+      case 'one_polaroid': add(156, 255, 869, 1050); break;
+      case 'one_cinema': add(96, 405, 989, 720); break;
+
+      case 'two_stack': grid(1, 2, 88, 230, 1005, 1190, 46); break;
+      case 'two_split': grid(2, 1, 78, 250, 1025, 1170, 34); break;
+      case 'two_hero': add(88, 220, 1005, 790); add(190, 1060, 801, 370); break;
+      case 'two_diagonal': add(78, 245, 935, 565); add(168, 875, 935, 565); break;
+
+      case 'three_triptych': grid(3, 1, 76, 245, 1029, 1175, 24); break;
+      case 'three_hero_pair': add(86, 220, 1009, 650); grid(2, 1, 86, 915, 1009, 510, 30); break;
+      case 'three_stack': grid(1, 3, 92, 220, 997, 1210, 28); break;
+      case 'three_story': add(78, 230, 620, 1190); grid(1, 2, 728, 230, 375, 1190, 34); break;
+
+      case 'four_grid': grid(2, 2, 82, 225, 1017, 1200, 32); break;
+      case 'four_stack': grid(1, 4, 102, 220, 977, 1210, 24); break;
+      case 'four_hero_three': add(84, 220, 1013, 650); grid(3, 1, 84, 915, 1013, 510, 24); break;
+      case 'four_grid_wide': grid(2, 2, 70, 260, 1041, 1120, 22); break;
+      case 'four_bands': add(80, 220, 650, 365); add(760, 220, 340, 365); add(80, 620, 340, 805); add(450, 620, 650, 805); break;
+
+      case 'five_feature': add(78, 225, 610, 1200); grid(1, 4, 718, 225, 385, 1200, 24); break;
+      case 'five_top_hero': add(82, 220, 1017, 610); grid(2, 2, 82, 870, 1017, 555, 28); break;
+      case 'five_mosaic': grid(2, 1, 82, 225, 1017, 520, 28); grid(3, 1, 82, 785, 1017, 640, 24); break;
+      case 'five_stripmix': add(78, 225, 350, 1200); grid(2, 2, 458, 225, 645, 1200, 24); break;
+
+      case 'six_grid_2x3': grid(2, 3, 80, 220, 1021, 1210, 26); break;
+      case 'six_grid_3x2': grid(3, 2, 72, 255, 1037, 1135, 22); break;
+      case 'six_hero_five': add(80, 220, 1021, 620); grid(5, 1, 80, 880, 1021, 545, 18); break;
+      case 'six_story': grid(2, 3, 92, 220, 997, 1210, 34); break;
+
+      case 'seven_3_4': grid(3, 1, 76, 225, 1029, 535, 22); grid(4, 1, 76, 800, 1029, 625, 18); break;
+      case 'seven_feature': add(76, 225, 510, 1200); grid(2, 3, 614, 225, 491, 1200, 20); break;
+      case 'seven_story': grid(2, 1, 82, 220, 1017, 350, 26); grid(3, 1, 82, 610, 1017, 420, 22); grid(2, 1, 82, 1070, 1017, 355, 26); break;
+
+      case 'eight_2x4': grid(2, 4, 82, 220, 1017, 1210, 22); break;
+      case 'eight_4x2': grid(4, 2, 70, 270, 1041, 1090, 18); break;
+      case 'eight_mosaic': grid(2, 1, 80, 220, 1021, 340, 28); grid(4, 1, 80, 600, 1021, 440, 18); grid(2, 1, 80, 1080, 1021, 345, 28); break;
+      default: grid(2, 2, 82, 225, 1017, 1200, 32);
     }
     return slots;
+  }
+
+  function drawPhotoboxBackground(ctx, def, W, H) {
+    ctx.fillStyle = def.bg;
+    ctx.fillRect(0, 0, W, H);
+    const motif = def.motif || 'dots';
+    const a = def.accent;
+    const b = def.accent2;
+
+    if (motif === 'minimal') {
+      for (let i = -H; i < W; i += 90) line(ctx, i, 0, i + H, H, withAlpha(a, .055), 2);
+    } else if (motif === 'grid') {
+      for (let x = 0; x < W; x += 72) line(ctx, x, 0, x, H, withAlpha(a, .09), 1);
+      for (let y = 0; y < H; y += 72) line(ctx, 0, y, W, y, withAlpha(b, .10), 1);
+    } else if (motif === 'checker') {
+      const s = 72;
+      for (let y = 0; y < H; y += s) for (let x = 0; x < W; x += s) {
+        if (((x / s) + (y / s)) % 2 === 0) { ctx.fillStyle = withAlpha(a, .09); ctx.fillRect(x, y, s, s); }
+      }
+    } else if (motif === 'waves') {
+      for (let y = 40; y < H; y += 90) {
+        ctx.beginPath(); ctx.strokeStyle = withAlpha((y / 90) % 2 ? a : b, .15); ctx.lineWidth = 4;
+        ctx.moveTo(0, y);
+        for (let x = 0; x <= W; x += 50) ctx.quadraticCurveTo(x + 25, y - 18, x + 50, y);
+        ctx.stroke();
+      }
+    } else if (motif === 'film') {
+      ctx.fillStyle = withAlpha(a, .12); ctx.fillRect(0, 0, W, 78); ctx.fillRect(0, H - 78, W, 78);
+      for (let x = 24; x < W; x += 72) { roundRect(ctx, x, 20, 38, 30, 5, withAlpha(b, .72)); roundRect(ctx, x, H - 50, 38, 30, 5, withAlpha(b, .72)); }
+      for (let i = 0; i < 150; i++) circle(ctx, (i * 83) % W, (i * 137) % H, 1 + (i % 3), withAlpha('#ffffff', .12));
+    } else if (motif === 'paper') {
+      for (let y = 100; y < H; y += 54) line(ctx, 0, y, W, y, withAlpha(a, .08), 1);
+      line(ctx, 128, 0, 128, H, withAlpha('#ef4444', .12), 2);
+      for (let i = 0; i < 80; i++) circle(ctx, (i * 151) % W, (i * 97) % H, 2, withAlpha(a, .08));
+    } else if (motif === 'cloud') {
+      for (let i = 0; i < 24; i++) {
+        const x = (i * 211) % W, y = 80 + (i * 173) % (H - 160);
+        circle(ctx, x, y, 28 + (i % 3) * 10, withAlpha(i % 2 ? a : b, .12));
+        circle(ctx, x + 34, y + 8, 22 + (i % 2) * 8, withAlpha(i % 2 ? a : b, .10));
+      }
+    } else if (motif === 'floral' || motif === 'botanical') {
+      for (let i = 0; i < 36; i++) {
+        const x = 34 + (i * 181) % (W - 68), y = 52 + (i * 223) % (H - 104);
+        ctx.save(); ctx.translate(x, y); ctx.rotate((i % 8) * Math.PI / 4);
+        ctx.fillStyle = withAlpha(i % 2 ? a : b, motif === 'floral' ? .20 : .16);
+        ctx.beginPath(); ctx.ellipse(0, 0, 8 + (i % 3) * 4, 22 + (i % 4) * 3, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        if (motif === 'floral' && i % 3 === 0) circle(ctx, x, y, 6, withAlpha(a, .28));
+      }
+    } else if (motif === 'hearts') {
+      for (let i = 0; i < 60; i++) text(ctx, i % 2 ? '♡' : '♥', 28 + (i * 67) % (W - 56), 70 + (i * 109) % (H - 140), 16 + (i % 3) * 4, withAlpha(i % 2 ? a : b, .18), 800);
+    } else if (motif === 'stars' || motif === 'sparkle') {
+      for (let i = 0; i < 80; i++) text(ctx, i % 3 ? '✦' : '★', 24 + (i * 79) % (W - 48), 64 + (i * 131) % (H - 128), 10 + (i % 4) * 4, withAlpha(i % 2 ? a : b, motif === 'stars' ? .28 : .20), 800);
+    } else if (motif === 'neon') {
+      const grad = ctx.createLinearGradient(0, 0, W, H); grad.addColorStop(0, def.bg); grad.addColorStop(.5, withAlpha(a, .18)); grad.addColorStop(1, withAlpha(b, .22)); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < 16; i++) { line(ctx, 0, 90 + i * 110, W, 20 + i * 110, withAlpha(i % 2 ? a : b, .18), 3); }
+    } else if (motif === 'geometry') {
+      for (let i = 0; i < 32; i++) {
+        const x = (i * 149) % W, y = (i * 211) % H, size = 20 + (i % 5) * 12;
+        roundRect(ctx, x, y, size, size, i % 2 ? 4 : size / 2, withAlpha(i % 2 ? a : b, .12));
+      }
+    } else if (motif === 'retro') {
+      const grad = ctx.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, withAlpha(a, .10)); grad.addColorStop(1, withAlpha(b, .16)); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      for (let y = 0; y < H; y += 84) { ctx.fillStyle = withAlpha(y % 168 ? a : b, .08); ctx.fillRect(0, y, W, 42); }
+      for (let i = 0; i < 30; i++) circle(ctx, 40 + (i * 173) % (W - 80), 50 + (i * 109) % (H - 100), 10 + (i % 4) * 5, withAlpha(a, .12));
+    } else if (motif === 'confetti') {
+      for (let i = 0; i < 120; i++) {
+        const x = (i * 97) % W, y = (i * 173) % H;
+        ctx.save(); ctx.translate(x, y); ctx.rotate(i * .67); ctx.fillStyle = withAlpha(i % 2 ? a : b, .24); ctx.fillRect(-3, -10, 6, 20); ctx.restore();
+      }
+    } else if (motif === 'disco') {
+      const grad = ctx.createRadialGradient(W / 2, H / 3, 40, W / 2, H / 3, W); grad.addColorStop(0, withAlpha(a, .28)); grad.addColorStop(1, def.bg); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      for (let y = 0; y < H; y += 58) for (let x = 0; x < W; x += 58) { ctx.fillStyle = withAlpha((x + y) % 116 ? a : b, .12); ctx.fillRect(x + 3, y + 3, 48, 48); }
+    } else {
+      for (let i = 0; i < 90; i++) circle(ctx, (i * 173) % W, (i * 229) % H, 6 + (i % 4) * 4, withAlpha(i % 2 ? a : b, i % 3 ? .11 : .18));
+    }
   }
 
   function generatePhotoboxFrameSrc(def) {
@@ -1820,34 +1965,26 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    ctx.fillStyle = def.bg;
-    ctx.fillRect(0, 0, W, H);
-
-    // Soft patterned background
-    for (let i = 0; i < 80; i++) {
-      const x = (i * 173) % W;
-      const y = (i * 229) % H;
-      const r = 7 + (i % 4) * 4;
-      ctx.fillStyle = withAlpha(i % 2 ? def.accent : def.accent2, i % 3 ? .13 : .2);
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    drawPhotoboxBackground(ctx, def, W, H);
 
     roundRect(ctx, 34, 34, W - 68, H - 68, 42, withAlpha('#ffffff', .08), withAlpha(def.accent, .42), 4);
     roundRect(ctx, 58, 58, W - 116, H - 116, 34, null, withAlpha(def.accent2, .30), 2);
 
-    text(ctx, 'PHOTOBOX 4R', W / 2, 110, 34, def.ink, 950);
+    text(ctx, def.title || 'PHOTOBOX 4R', W / 2, 110, 31, def.ink, 950);
     text(ctx, 'lux photobooth', W / 2, 150, 18, withAlpha(def.ink, .62), 800);
     text(ctx, 'print size 10×15', W / 2, H - 114, 20, withAlpha(def.ink, .68), 800);
-    text(ctx, '♡  ✦  memories in a box  ✦  ♡', W / 2, H - 72, 22, def.accent, 900);
+    text(ctx, `${slots.length} FRAME${slots.length > 1 ? 'S' : ''}  ·  LUX PHOTOBOOTH`, W / 2, H - 72, 20, def.accent, 900);
 
+    const borderStyle = def.border || 'soft';
+    const outerRadius = borderStyle === 'square' || borderStyle === 'film' ? 8 : (borderStyle === 'pill' ? 42 : 28);
+    const borderWidth = borderStyle === 'film' ? 10 : 5;
     slots.forEach((s, idx) => {
       ctx.clearRect(s.x, s.y, s.w, s.h);
-      roundRect(ctx, s.x - 12, s.y - 12, s.w + 24, s.h + 24, 30, null, withAlpha(def.accent, .72), 5);
-      roundRect(ctx, s.x - 2, s.y - 2, s.w + 4, s.h + 4, 22, null, withAlpha('#ffffff', .92), 3);
-      roundRect(ctx, s.x + 18, s.y + 18, 110, 34, 17, withAlpha(def.bg, .88), withAlpha(def.accent2, .35), 1.5);
-      text(ctx, `Foto ${idx + 1}`, s.x + 73, s.y + 40, 15, def.ink, 900);
+      roundRect(ctx, s.x - 12, s.y - 12, s.w + 24, s.h + 24, outerRadius, null, withAlpha(def.accent, .76), borderWidth);
+      roundRect(ctx, s.x - 2, s.y - 2, s.w + 4, s.h + 4, Math.max(4, outerRadius - 8), null, withAlpha('#ffffff', .92), 3);
+      const badgeW = Math.min(116, Math.max(72, s.w * .32));
+      roundRect(ctx, s.x + 14, s.y + 14, badgeW, 32, 14, withAlpha(def.bg, .90), withAlpha(def.accent2, .42), 1.5);
+      text(ctx, String(idx + 1).padStart(2, '0'), s.x + 14 + badgeW / 2, s.y + 36, 14, def.ink, 950);
     });
 
     const data = { src: c.toDataURL('image/png'), slots, w: W, h: H };
@@ -1930,7 +2067,7 @@
 
   // ─── Local built-in template state ───
   let selectedTemplate = null;
-  let currentCat = isPhotoboxMode ? 'four' : '__basic__';
+  let currentCat = isPhotoboxMode ? '4' : '__basic__';
 
   function mapFrameDef(def) {
     const data = generateBuiltInFrameSrc(def);
@@ -1953,6 +2090,7 @@
       name: def.name,
       category: PHOTOBOX_CATEGORY,
       layout: def.layout,
+      slotCount: def.slots,
       isBuiltIn: true,
       isPhotobox: true,
       src: data.src,
@@ -1965,7 +2103,7 @@
   function getTemplatesForCurrentCategory() {
     builtInCache.clear();
     if (isPhotoboxMode) {
-      return PHOTOBOX_DEFS.filter(def => def.layout === currentCat).map(mapPhotoboxDef);
+      return PHOTOBOX_DEFS.filter(def => String(def.slots) === currentCat).map(mapPhotoboxDef);
     }
     if (currentCat === '__basic__') return getAllBasicTemplates();
     return BUILTIN_FRAME_DEFS.filter(def => def.category === currentCat).map(mapFrameDef);
@@ -1973,12 +2111,11 @@
 
   function getCategoryTabs() {
     if (isPhotoboxMode) {
-      return [
-        { label: '4 Foto', value: 'four' },
-        { label: '3 Foto', value: 'three' },
-        { label: '2 Foto', value: 'two' },
-        { label: 'Hero', value: 'big' }
-      ];
+      return Array.from({ length: 8 }, (_, index) => {
+        const value = String(index + 1);
+        const count = PHOTOBOX_DEFS.filter(def => String(def.slots) === value).length;
+        return { label: `${value} Foto (${count})`, value };
+      });
     }
     return [
       { label: 'Basic', value: '__basic__' },

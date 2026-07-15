@@ -1,7 +1,7 @@
 {
   "name": "LUX Photobooth Local",
   "short_name": "LUX Local",
-  "description": "Photostrip, Photobox 4R, dan Ganci tanpa login atau database server.",
+  "description": "Photostrip, Photobox 4R, Ganci, dan penggabung dua strip tanpa login atau database server.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",
