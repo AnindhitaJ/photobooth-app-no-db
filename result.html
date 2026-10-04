@@ -542,17 +542,87 @@
 
   async function maybeWatermarkDataURL(dataURL) { return dataURL; }
 
-  function triggerDownload(href, filename) {
+  // ─── Simpan file: aware iOS/iPadOS ───
+  // iOS Safari (terutama versi lama / mode PWA / in-app browser) sering mengabaikan <a download>.
+  // Di iOS kita pakai Web Share (menu "Simpan Gambar"), lalu fallback ke overlay "tahan gambar → Simpan".
+  function isIOSLike() {
+    const ua = navigator.userAgent || '';
+    return /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad mode desktop
+  }
+
+  function anchorDownload(blob, filename) {
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    if (href.startsWith('blob:') || href.startsWith('http')) {
-      a.href = href;
-    } else {
-      a.href = URL.createObjectURL(dataURLtoBlob(href));
-    }
+    a.href = url;
     a.download = filename;
+    a.rel = 'noopener';
     document.body.appendChild(a);
     a.click();
-    setTimeout(() => document.body.removeChild(a), 300);
+    setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 4000);
+  }
+
+  function showSaveOverlay(blob, filename) {
+    const old = document.getElementById('iosSaveOverlay');
+    if (old) old.remove();
+    const url = URL.createObjectURL(blob);
+    const type = blob.type || '';
+    const ov = document.createElement('div');
+    ov.id = 'iosSaveOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(29,53,87,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;gap:12px;overflow:auto;';
+    const tip = document.createElement('div');
+    tip.style.cssText = 'color:#fff;font-weight:800;text-align:center;font-size:15px;line-height:1.5;max-width:360px;';
+    let media;
+    if (type.startsWith('image/')) {
+      tip.textContent = 'Tahan lama gambar di bawah, lalu pilih "Simpan ke Foto" 📲';
+      media = document.createElement('img');
+      media.src = url;
+      media.style.cssText = 'max-width:100%;max-height:68vh;border-radius:12px;background:#fff;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;';
+    } else if (type.startsWith('video/')) {
+      tip.textContent = 'Tahan video lalu pilih "Simpan", atau tekan tombol bagikan di player.';
+      media = document.createElement('video');
+      media.src = url; media.controls = true; media.playsInline = true;
+      media.style.cssText = 'max-width:100%;max-height:68vh;border-radius:12px;background:#000;';
+    } else {
+      tip.textContent = 'Tekan tombol di bawah untuk membuka / menyimpan file.';
+      media = document.createElement('a');
+      media.href = url; media.download = filename; media.target = '_blank';
+      media.textContent = 'Buka ' + filename;
+      media.style.cssText = 'background:#fff;color:#1D3557;font-weight:800;padding:14px 22px;border-radius:999px;text-decoration:none;';
+    }
+    const close = document.createElement('button');
+    close.textContent = 'Tutup';
+    close.style.cssText = 'border:0;border-radius:999px;padding:12px 28px;font-weight:900;font-size:15px;background:#D84B7E;color:#fff;';
+    close.onclick = () => { ov.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+    ov.append(tip, media, close);
+    document.body.appendChild(ov);
+  }
+
+  async function saveBlob(blob, filename) {
+    if (!blob) throw new Error('File kosong');
+    if (!isIOSLike()) { anchorDownload(blob, filename); return 'downloaded'; }
+
+    try {
+      const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
+      if (navigator.canShare && navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'LUX Photobooth' });
+        return 'shared';
+      }
+    } catch (e) {
+      if (e && e.name === 'AbortError') return 'cancelled'; // user menutup share sheet
+      console.warn('Web Share gagal, pakai overlay simpan:', e);
+    }
+    showSaveOverlay(blob, filename);
+    return 'overlay';
+  }
+
+  // href boleh berupa Blob, data:, atau blob:/http URL
+  async function triggerDownload(href, filename) {
+    let blob;
+    if (href instanceof Blob) blob = href;
+    else if (typeof href === 'string' && href.startsWith('data:')) blob = dataURLtoBlob(href);
+    else blob = await (await fetch(href)).blob();
+    return saveBlob(blob, filename);
   }
 
   function showStatus(msg, color = '#27ae60') {
@@ -903,7 +973,7 @@
   async function downloadGif(skipConsent = false) {
     if (!skipConsent) return ensureResultConsent(() => downloadGif(true));
     if (gifBlob) {
-      triggerDownload(URL.createObjectURL(gifBlob), `lux-animated-${Date.now()}.gif`);
+      triggerDownload(gifBlob, `lux-animated-${Date.now()}.gif`);
       showStatus('Download GIF ✓');
       return;
     }
@@ -920,7 +990,7 @@
       document.getElementById('gifHint').textContent = '';
       btn.disabled = false;
       btn.querySelector('.btn-label').textContent = 'Download GIF Animasi';
-      triggerDownload(URL.createObjectURL(gifBlob), `lux-animated-${Date.now()}.gif`);
+      triggerDownload(gifBlob, `lux-animated-${Date.now()}.gif`);
       showStatus('GIF berhasil dibuat ✓');
     } catch(e) {
       console.error('GIF error:', e);
@@ -1824,14 +1894,8 @@
       btn.disabled = false;
       btn.querySelector('.btn-label').textContent = 'Download Semua (ZIP)';
 
-      // Trigger download
-      const url = URL.createObjectURL(zipBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `lux-photobooth-${Date.now()}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+      // Trigger download (iOS-aware)
+      await saveBlob(zipBlob, `lux-photobooth-${Date.now()}.zip`);
       showStatus('ZIP berhasil didownload ✓');
 
     } catch(e) {
