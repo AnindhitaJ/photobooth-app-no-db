@@ -317,6 +317,64 @@
       return new Promise((resolve, reject) => canvasEl.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat file gambar.')), type, quality));
     }
 
+    // ─── Simpan file: aware iOS/iPadOS ───
+    // Safari iOS/iPadOS (versi lama, mode PWA "Add to Home Screen", atau in-app browser)
+    // sering mengabaikan <a download> pada blob. Di iOS pakai Web Share (menu "Simpan Gambar"),
+    // lalu fallback ke overlay "tahan gambar → Simpan ke Foto".
+    function isIOSLike() {
+      const ua = navigator.userAgent || '';
+      return /iPad|iPhone|iPod/.test(ua) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad mode desktop
+    }
+
+    function anchorDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 4000);
+    }
+
+    function showSaveOverlay(blob) {
+      const old = document.getElementById('iosSaveOverlay');
+      if (old) old.remove();
+      const url = URL.createObjectURL(blob);
+      const ov = document.createElement('div');
+      ov.id = 'iosSaveOverlay';
+      ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(29,53,87,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;gap:12px;overflow:auto;';
+      const tip = document.createElement('div');
+      tip.style.cssText = 'color:#fff;font-weight:800;text-align:center;font-size:15px;line-height:1.5;max-width:360px;';
+      tip.textContent = 'Tahan lama gambar di bawah, lalu pilih "Simpan ke Foto" 📲';
+      const img = document.createElement('img');
+      img.src = url;
+      img.style.cssText = 'max-width:100%;max-height:68vh;border-radius:12px;background:#fff;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;';
+      const close = document.createElement('button');
+      close.textContent = 'Tutup';
+      close.style.cssText = 'border:0;border-radius:999px;padding:12px 28px;font-weight:900;font-size:15px;background:#D84B7E;color:#fff;';
+      close.onclick = () => { ov.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+      ov.append(tip, img, close);
+      document.body.appendChild(ov);
+    }
+
+    async function saveBlob(blob, filename) {
+      if (!isIOSLike()) { anchorDownload(blob, filename); return 'downloaded'; }
+      try {
+        const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+        if (navigator.canShare && navigator.share && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'LUX Photobooth' });
+          return 'shared';
+        }
+      } catch (e) {
+        if (e && e.name === 'AbortError') return 'cancelled'; // user menutup share sheet
+        console.warn('Web Share gagal, pakai overlay simpan:', e);
+      }
+      showSaveOverlay(blob);
+      return 'overlay';
+    }
+
     async function downloadResult() {
       if (!strips[0] || !strips[1]) return;
       const button = document.getElementById('downloadBtn');
@@ -327,15 +385,12 @@
         render();
         const quality = Number(document.getElementById('quality').value || .94);
         const blob = await canvasToBlob(canvas, 'image/jpeg', quality);
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `lux-2-photostrip-4r-${Date.now()}.jpg`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1200);
-        setStatus('Download selesai. File berukuran 1181 × 1772 px.');
+        const filename = `lux-2-photostrip-4r-${Date.now()}.jpg`;
+        const result = await saveBlob(blob, filename);
+        if (result === 'cancelled') setStatus('Dibatalkan. Tekan tombol lagi bila ingin menyimpan.');
+        else if (result === 'overlay') setStatus('Tahan lama gambar lalu pilih "Simpan ke Foto".');
+        else if (result === 'shared') setStatus('Pilih "Simpan Gambar" di menu bagikan. Ukuran 1181 × 1772 px.');
+        else setStatus('Download selesai. File berukuran 1181 × 1772 px.');
       } catch (error) {
         setStatus(error.message || 'Gagal mendownload file.', true);
       } finally {
